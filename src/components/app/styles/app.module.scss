@@ -1,0 +1,10 @@
+@import "const.module";
+@import "normalize.css";
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 320px;
+  background-color: $app-background;
+}

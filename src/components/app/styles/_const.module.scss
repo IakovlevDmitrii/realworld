@@ -1,0 +1,29 @@
+/* Extra small devices (phones, 600px and down) */
+/* @media only screen and (max-width: 600px) {...} */
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+/* @media only screen and (min-width: 600px) {...} */
+
+/* Medium devices (landscape tablets, 768px and up) */
+/* @media only screen and (min-width: 768px) {...} */
+
+/* Large devices (laptops/desktops, 992px and up) */
+/* @media only screen and (min-width: 992px) {...} */
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+/* @media only screen and (min-width: 1200px) {...} */
+
+/* ----- colors ----- */
+$brand-primary-1: rgba(255, 255, 255, 1);
+$brand-primary-2: rgba(235, 238, 243, 1);
+$brand-primary-3: rgba(82, 196, 26, 1);
+$brand-primary-4: rgba(24, 144, 255, 1);
+
+$app-background: $brand-primary-2;
+
+$article-list-header-background: $brand-primary-1;
+$article-list-active-sign: $brand-primary-3;
+
+$article-list-item-background: $brand-primary-1;
+$article-list-item-title: $brand-primary-4;
+
