@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './article-list-item.module.scss';
 import heartSource from './images/heart.png';
+import photoSource from './images/photo.png';
 
 const {
    main,
@@ -47,7 +48,11 @@ const ArticleListItem = () => (
             <p className={authorName}>John Doe</p>
             <span className={date}>date</span>
          </div>
-         <div className={authorPhoto}>Photo</div>
+         <div className={authorPhoto}>
+            <img
+               src={photoSource}
+               alt='userPhoto' />
+         </div>
       </div>
    </div>
 );

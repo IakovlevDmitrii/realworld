@@ -3,9 +3,9 @@
 
 .main {
   display: flex;
+  justify-content: space-between;
   max-width: 940px;
   max-height: 140px;
-  padding: 12px 12px 20px 20px;
   background-color: $article-list-item-background;
   border-radius: 5px;
   box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15);
@@ -13,6 +13,7 @@
 
 .article {
   max-width: 700px;
+  padding: 16px 20px 24px;
 }
 
 .title {
@@ -46,6 +47,7 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+  margin-top: 6px;
 
     .tag {
       height: 20px;
@@ -65,6 +67,7 @@
 .text {
   height: 45px;
   overflow: hidden;
+  margin-top: 6px;
   padding-right: 8px;
   line-height: 22px;
   color: rgba(0, 0, 0, 0.75);
@@ -76,7 +79,38 @@
 }
 
 .author {
+  align-self: flex-start;
   display: flex;
-  margin-left: auto;
+  align-items: center;
   max-width: 240px;
+  padding: 14px;
+
+    .authorInfo {
+      display: flex;
+      flex-direction: column;
+
+        .authorName {
+          color: rgba(0, 0, 0, 0.85);
+          line-height: 22px;
+          font: {
+            family: 'InterRegular';
+            size: 18px;
+            weight: 400;
+          };
+        }
+
+        .date {
+          color: rgba(0, 0, 0, 0.5);
+          line-height: 16px;
+          font: {
+            family: 'InterRegular';
+            size: 12px;
+            weight: 400;
+          };
+        }
+    }
+
+    .authorPhoto {
+      margin-left: 12px;
+    }
 }
