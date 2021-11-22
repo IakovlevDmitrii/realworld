@@ -3,11 +3,10 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import Fieldset from "../../fieldset";
 import styles from './SignUp.module.scss';
 
 const {
-   section, container, content, title, authLink, link
+   section, container, content, title, error, authLink, link
 } = styles;
 
 const SignUp = () => {
@@ -38,58 +37,6 @@ const SignUp = () => {
 
    const onSubmit = data => console.log(data);
 
-   const formConfig = [
-      {
-         label: 'Username',
-         name: 'username',
-         placeholder: "Username",
-         type: 'text'
-      },
-      {
-         label: 'Email address',
-         name: 'email',
-         placeholder: "Email address",
-         type: 'email'
-      },
-      {
-         label: 'Password',
-         name: 'password',
-         placeholder: "Password",
-         type: 'password'
-      },
-      {
-         label: 'Repeat Password',
-         name: 'confirmPassword',
-         placeholder: "Password",
-         type: 'password'
-      },
-   ];
-
-   const formRender = formConfig.map((field) => {
-      const {
-         label,
-         name,
-         placeholder,
-         type,
-      } = field;
-
-      return (
-         <Fieldset
-            errorMessage={errors[name]?.message}
-            hasError={[name] in errors}
-            key={name}
-            label={label}
-            name={name}
-            placeholder={placeholder}
-            register={register("email")}
-            type={type}
-         />
-      )
-   });
-
-   console.log(errors);
-
-
    return (
       <section className={section}>
          <div className={container}>
@@ -98,23 +45,68 @@ const SignUp = () => {
                   <h3>Create new account</h3>
                </div>
                <form onSubmit={handleSubmit(onSubmit)}>
-                  {formRender}
-                   <Fieldset
-                     errorMessage={errors.agreement?.message}
-                     hasError={'agreement' in errors}
-                     label='I agree to the processing of my personal information'
-                     name='agreement'
-                     register={register("agreement")}
-                     type='checkBox'
-                  />
-                  <button type='submit'>
-                     Create
-                  </button>
+                  <fieldset>
+                     <label htmlFor='username'>Username</label>
+                     <input
+                        id='username'
+                        className={errors.username ? error : ''}
+                        placeholder='Username'
+                        type='text'
+                        {...register("username")}
+                     />
+                     {errors.username && <span>{errors.username?.message}</span>}
+                  </fieldset>
+                  <fieldset>
+                     <label htmlFor='email'>Email address</label>
+                     <input
+                        id='email'
+                        className={errors.email ? error : ''}
+                        placeholder='Email address'
+                        type='email'
+                        {...register("email")}
+                     />
+                     {errors.email && <span>{errors.email?.message}</span>}
+                  </fieldset>
+                  <fieldset>
+                     <label htmlFor='password'>Password</label>
+                     <input
+                        id='password'
+                        className={errors.password ? error : ''}
+                        placeholder='Password'
+                        type='password'
+                        {...register("password")}
+                     />
+                     {errors.password && <span>{errors.password?.message}</span>}
+                  </fieldset>
+                  <fieldset>
+                     <label htmlFor='confirmPassword'>Repeat Password</label>
+                     <input
+                        id='confirmPassword'
+                        className={errors.confirmPassword ? error : ''}
+                        placeholder='Password'
+                        type='password'
+                        {...register("confirmPassword")}
+                     />
+                     {errors.confirmPassword && <span>{errors.confirmPassword?.message}</span>}
+                  </fieldset>
+                  <fieldset>
+                     <input
+                        id='agreement'
+                        className={errors.agreement ? error : ''}
+                        type='checkBox'
+                        {...register("agreement")}
+                     />
+                     <label htmlFor='agreement'>
+                        I agree to the processing of my personal information
+                     </label>
+                     {errors.agreement && <span>{errors.agreement?.message}</span>}
+                  </fieldset>
+                  <button type='submit'>Create</button>
                </form>
                <div className={authLink}>
                   <div>Already have an account?</div>
                   <div className={link}>
-                     <Link to='/auth'>Sign In.</Link>
+                     <Link to='/sign-in'>Sign In.</Link>
                   </div>
                </div>
             </div>
@@ -124,34 +116,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-
-/*
-   <Fieldset
-      errorMessage={errors.username?.message}
-      hasError={'username' in errors}
-      label='Username'
-      name='username'
-      placeholder="Username"
-      register={register("username")}
-      type='text'
-   />
-   <Fieldset
-      errorMessage={errors.email?.message}
-      hasError={'email' in errors}
-      label='Email address'
-      name='email'
-      placeholder="Email address"
-      register={register("email")}
-      type='email'
-   />
-   <Fieldset
-      errorMessage={errors.password?.message}
-      hasError={'password' in errors}
-      label='Password'
-      name='password'
-      placeholder="Password"
-      register={register("password")}
-      type='password'
-   />
-
- */

@@ -5,7 +5,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import styles from './SignIn.module.scss';
 
-const { section, container, content, title, invalid, authLink, link } = styles;
+const {
+   section, container, content, title, error, authLink, link
+} = styles;
 
 const SignIn = () => {
 
@@ -34,52 +36,33 @@ const SignIn = () => {
                </div>
                <form onSubmit={handleSubmit(onSubmit)}>
                   <fieldset>
-                     <label htmlFor='email'>
-                        Email address
-                     </label>
+                     <label htmlFor='email'>Email address</label>
                      <input
                         id='email'
-                        className={errors.email ? invalid : ''}
+                        className={errors.email ? error : ''}
                         placeholder="Email address"
                         type='email'
                         {...register("email")}
                      />
-                     {errors.email &&
-                        <span>
-                           {errors.email?.message}
-                        </span>
-                     }
+                     {errors.email &&<span>{errors.email?.message}</span>}
                   </fieldset>
                   <fieldset>
-                     <label htmlFor='password'>
-                        Password
-                     </label>
+                     <label htmlFor='password'>Password</label>
                      <input
                         id='password'
-                        className={errors.password ? invalid : ''}
+                        className={errors.password ? error : ''}
                         placeholder="Password"
                         type='password'
                         {...register("password")}
                      />
-                     {errors.password &&
-                        <span>
-                           {errors.password?.message}
-                        </span>
-                     }
+                     {errors.password &&<span>{errors.password?.message}</span>}
                   </fieldset>
-                  <button
-                     type='submit'
-                     disabled={!isValid}
-                  >
-                     Login
-                  </button>
+                  <button type='submit' disabled={!isValid}>Login</button>
                </form>
                <div className={authLink}>
                   <div>Don’t have an account?</div>
                   <div className={link}>
-                     <Link to='/auth'>
-                        Sign Up.
-                     </Link>
+                     <Link to='/sign-up'>Sign Up.</Link>
                   </div>
                </div>
             </div>
