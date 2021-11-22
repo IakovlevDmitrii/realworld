@@ -1,0 +1,114 @@
+@import '../../app/styles/const.module';
+
+.content {
+   @extend %container__separate;
+   flex-direction: column;
+   box-shadow: 0 0.3rem 1rem 0 rgba(0, 0, 0, 0.15);
+
+   @media only screen and ($screen-sm) {
+      flex-direction: row;
+   }
+}
+
+.article {
+   height: 10rem;
+   border-bottom: 3px solid $brand_primary__4;
+
+   @media only screen and ($screen-sm) {
+      width: 60%;
+      border-bottom: 0
+   }
+
+   &Info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 45%;
+      padding: 0.5rem 1rem 0;
+
+      @media only screen and ($screen-sm) {
+         padding: 0.75rem 1.5rem 0;
+      }
+   }
+}
+
+.title {
+   @extend %flex_center;
+   justify-content: space-between;
+   height: 1.75rem;
+
+   @media only screen and ($screen-sm) {
+      justify-content: flex-start;
+   }
+
+   a {
+      @extend %flex_center;
+      max-width: 85%;
+      height: 1.75rem;
+      overflow: hidden;
+   }
+
+   h2 {
+      font-size: 1.25rem;
+      color: $brand_primary__2;
+   }
+}
+
+.favorites {
+   @extend %flex_center;
+   justify-content: flex-end;
+
+   @media only screen and ($screen-sm) {
+      margin-left: 1rem;
+   }
+}
+
+.favoritesCount {
+   margin-left: 0.5rem;
+}
+
+.tags {
+   @extend %flex_center;
+   height: 1.5rem;
+   overflow: hidden;
+}
+
+.tag {
+   @extend %flex_center__full;
+   height: 1.25rem;
+   margin-right: 0.75rem;
+   border: 1px solid rgba(0, 0, 0, 0.5);
+   border-radius: 0.1rem;
+   padding: 0 0.25rem;
+   font-size: 0.75rem;
+}
+
+.body {
+   height: 55%;
+   overflow: hidden;
+   padding: 0.25rem 1rem;
+
+   @media only screen and ($screen-sm) {
+      padding: 0.5rem 1.5rem 0.75rem;
+   }
+
+   p {
+      font-size: 0.75rem;
+   }
+}
+
+.author {
+   display: flex;
+   align-items: center;
+   justify-content: flex-start;
+   height: 5rem;
+   padding: {
+      left: 1.5rem;
+      right: 1.5rem;
+   }
+
+   @media only screen and ($screen-sm) {
+      width: 40%;
+      justify-content: flex-end;
+   }
+}

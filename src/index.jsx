@@ -1,8 +1,20 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './components/app';
+import { render } from 'react-dom';
+import { Provider } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
 
-ReactDOM.render(
-   <App />,
+import App from './components/app';
+import ErrorBoundary from './components/errors/error-boundary';
+
+import store from './store/store';
+
+render(
+   <Provider store={store}>
+      <ErrorBoundary>
+         <Router>
+            <App />
+         </Router>
+      </ErrorBoundary>
+   </Provider>,
    document.getElementById('root')
 );

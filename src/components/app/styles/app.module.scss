@@ -1,10 +1,15 @@
 @import "const.module";
 @import "normalize.css";
 
-.app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+body {
+  background-color: $brand_primary__4;
+}
+
+body > div {
+  padding-bottom: 2rem;
+}
+
+.content {
   min-width: 320px;
-  background-color: $app-background;
+  min-height: 100vh;
 }

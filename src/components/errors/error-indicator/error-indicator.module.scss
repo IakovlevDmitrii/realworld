@@ -1,0 +1,24 @@
+@import '../../app/styles/const.module';
+
+.errorIndicator {
+  padding: 2rem 0;
+}
+
+.container {
+  @extend %container;
+}
+
+.content {
+  @extend %container__separate;
+  box-shadow: 0 0.3rem 1rem 0 rgba(0, 0, 0, 0.15);
+}
+
+.title {
+  width: 100%;
+  padding: 1rem 0.5rem;
+  text-align: center;
+
+  span {
+    font-size: 1rem;
+  }
+}
