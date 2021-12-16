@@ -1,21 +1,30 @@
-import { ARTICLE } from '../actions-types';
+import actionTypes from '../actions-types';
 
-const { SLUG_CHANGED, LOADING, LOADED, HAS_ERROR } = ARTICLE;
+const { SLUG_CHANGED, LOADING, LOADED, HAS_ERROR } = actionTypes.ARTICLE;
 
-export const slugChanged = (slug) => ({
+const slugChanged = (slug) => ({
   type: SLUG_CHANGED,
   payload: slug,
 });
 
-export const articleLoading = () => ({
+const articleLoading = () => ({
   type: LOADING,
 });
 
-export const articleLoaded = (article) => ({
+const articleLoaded = (article) => ({
   type: LOADED,
   payload: article,
 });
 
-export const articleHasError = () => ({
+const articleHasError = () => ({
   type: HAS_ERROR,
 });
+
+const articleActions = {
+  slugChanged,
+  articleLoading,
+  articleLoaded,
+  articleHasError,
+};
+
+export default articleActions;

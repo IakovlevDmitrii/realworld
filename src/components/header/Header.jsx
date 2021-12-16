@@ -1,43 +1,69 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import PersonDetails from "../person-details";
+import src from './image/User.png';
 import styles from './Header.module.scss';
 
 const {
-   header, container, content, logo, articleButton, authButton, authButtonActive,
+   authButton,
+   authButtonActive,
+   personInfo,
+   personName,
+   personImage,
 } = styles;
 
-const auth = classNames({
+const link = classNames({
    [authButton]: true,
    [authButtonActive]: false,
 });
 
-const Header = ({ user }) => {
-   const { isAuthenticated, imageSrc } = user;
+const Header = ({ auth }) => {
 
-   const linksToShow = isAuthenticated ? (
-      <>
-         <Link to='/sign-up' className={articleButton}>Create article</Link>
-         <Link to='/sign-up'>
-            <PersonDetails name='John Doe' src={imageSrc} alt="user's avatar" />
-         </Link>
-         <Link to='/sign-up' className={auth}>Log Out</Link>
-      </> ) : (
-      <>
-         <Link to='/sign-in' className={auth}>Sign In</Link>
-         <Link to='/sign-up' className={auth}>Sign Up</Link>
-      </>
-   );
+   const getLinksToShow = () => {
+      const { loggedIn } = auth;
+
+      if(loggedIn) {
+         const { user } = auth;
+
+         return (
+             <>
+               <Link to='/sign-up' className={styles.articleButton}>Create article</Link>
+               <Link to='/profile' className={styles.person}>
+                  <div className={personInfo}>
+                     <div className={personName}>{user.username}</div>
+                  </div>
+                  <div className={personImage}>
+                     <img src={user.image || src} alt="user's avatar" />
+                  </div>
+               </Link>
+               <button
+                  type='button'
+                  className={link}
+                  onClick={localStorage.clear()}>Log Out</button>
+            </>
+         )
+      }
+
+      return (
+         <>
+            <Link to='/sign-in' className={link}>
+               Sign In
+            </Link>
+            <Link to='/sign-up' className={link}>
+               Sign Up
+            </Link>
+         </>
+      )
+   };
 
    return (
-      <header className={header}>
-         <div className={container}>
-            <div className={content}>
-               <Link to='/articles' className={logo}>Realworld blog</Link>
-               {linksToShow}
+      <header className={styles.header}>
+         <div className={styles.container}>
+            <div className={styles.content}>
+               <Link to='/articles' className={styles.logo}>Realworld blog</Link>
+               {getLinksToShow()}
             </div>
          </div>
       </header>
@@ -45,13 +71,24 @@ const Header = ({ user }) => {
 };
 
 Header.propTypes = {
-   user: PropTypes.shape({
-      isAuthenticated: PropTypes.bool.isRequired,
-      name: PropTypes.string.isRequired,
-      imageSrc: PropTypes.string.isRequired,
-   }).isRequired,
+   auth: PropTypes.shape({
+      user: PropTypes.shape({
+         username: PropTypes.string,
+         image: PropTypes.string,
+      }),
+      loggedIn: PropTypes.bool.isRequired,
+   }),
 };
 
-const mapStateToProps = ({ user }) => ({ user });
+Header.defaultProps = {
+   auth: {
+      user: {
+         username: '',
+         image: '',
+      }
+   }
+};
+
+const mapStateToProps = ({auth}) => ({auth});
 
 export default connect(mapStateToProps)(Header);

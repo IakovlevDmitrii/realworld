@@ -7,21 +7,16 @@ import Spinner from "../../spinner";
 import ErrorIndicator from "../../errors/error-indicator";
 import Article from '../article';
 
-import realWorldApiService from '../../../services';
-
-import {
-   listLoading, listLoaded, listHasError, listPageChanged
-} from '../../../store/actions/article-list';
-
-import { slugChanged } from '../../../store/actions/article';
+import realWorldApiService from '../../../service';
+import { articleActions, articleListActions } from '../../../store/actions';
 
 import 'antd/dist/antd.css';
 import './styles/pagination.css';
 import styles from './styles/ArticleList.module.scss';
 
+const { slugChanged } = articleActions;
+const { listLoading, listLoaded, listHasError, listPageChanged } = articleListActions;
 const { section, container, content, list, item, pagination } = styles;
-
-const { getArticleList } = realWorldApiService;
 
 const ArticleList = ({
    articleList,
@@ -40,7 +35,8 @@ const ArticleList = ({
       () => {
          loadingDispatch();
 
-         getArticleList(articleListPage)
+         realWorldApiService
+            .Articles.all(articleListPage)
             .then((data) => ( loadedDispatch(data) ))
             .catch( () => hasErrorDispatch() )
       },
@@ -116,4 +112,7 @@ const mapDispatchToProps = {
    slugChangedDispatch: slugChanged
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleList);
+export default connect(
+   mapStateToProps,
+   mapDispatchToProps
+)(ArticleList);

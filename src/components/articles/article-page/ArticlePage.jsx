@@ -2,14 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
-import realWorldApiService from '../../../services';
-
-import {
-   slugChanged,
-   articleLoading,
-   articleLoaded,
-   articleHasError
-} from "../../../store/actions/article";
+import realWorldApiService from '../../../service';
+import { articleActions } from "../../../store/actions";
 
 import Spinner from "../../spinner";
 import ErrorIndicator from "../../errors/error-indicator";
@@ -17,8 +11,13 @@ import Article from '../article';
 
 import styles from './ArticlePage.module.scss';
 
-const { getArticle } = realWorldApiService;
-
+const { Articles } = realWorldApiService;
+const {
+   slugChanged,
+   articleLoading,
+   articleLoaded,
+   articleHasError
+} = articleActions;
 const { section, container } = styles;
 
 const ArticlePage = ({
@@ -36,7 +35,7 @@ const ArticlePage = ({
       () => {
          loadingDispatch();
 
-         getArticle(slug)
+         Articles.get(slug)
             .then((data) => loadedDispatch(data))
             .catch(() => hasErrorDispatch())
       },

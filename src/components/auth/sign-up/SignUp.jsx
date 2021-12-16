@@ -1,41 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
+import PropTypes from 'prop-types';
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
+import realWorldApiService from '../../../service';
+import { authActions } from '../../../store/actions';
+import Spinner from "../../spinner";
 import styles from './SignUp.module.scss';
+import src from './images/User.png';
 
-const {
-   section, container, content, title, error, authLink, link
-} = styles;
+const { addUser, authLoading, loggedIn } = authActions;
+const { section, container, content, title, error, authLink, link } = styles;
 
-const SignUp = () => {
+const SignUp = ({
+   auth,
+   addUserDispatch,
+   loadingDispatch,
+   loggedInDispatch
+}) => {
 
-   const validationSchema = Yup.object().shape({
-      username: Yup.string()
-         .required('Username is required')
-         .min(3, 'Username must be at least 3 characters')
-         .max(20, 'Username must not exceed 20 characters'),
-      email: Yup.string()
-         .required('Email is required')
-         .email('Email is invalid'),
-      password: Yup.string()
-         .required('Password is required')
-         .min(6, 'Password must be at least 6 characters')
-         .max(40, 'Password must not exceed 40 characters'),
-      confirmPassword: Yup.string()
-         .required('Repeat Password is required')
-         .oneOf([Yup.ref('password'), null], 'Password does not match'),
-      agreement: Yup.bool()
-         .oneOf([true], 'Agreement is required')
-   });
+   const { loading } = auth;
+   const [ hasErrors, setHasError ] = useState({});
+   const { register, handleSubmit, watch, formState: {errors} } = useForm();
 
-   const { register, handleSubmit, formState: {errors} } = useForm({
-      resolver: yupResolver(validationSchema),
-      mode: 'onSubmit',
-   });
+   const watchPassword = watch('password');
 
-   const onSubmit = data => console.log(data);
+   // удалить
+   const user = {
+      email: "a@a.a",
+      token: "react",
+      username: "John Duo",
+      bio: "hello",
+      image: src
+   };
+
+   const onSubmit = (data) => {
+      setHasError({});
+      loadingDispatch(true);
+
+      const { username, email, password } = data;
+
+      realWorldApiService
+         .Auth
+         .register(username, email, password)
+         .then((res) => {
+            if(res.errors) {
+               setHasError(res.errors);
+               loadingDispatch(false);
+
+               // перенести в if(res.user)
+               addUserDispatch(user);
+
+               window.localStorage
+                  .setItem('user', JSON.stringify(user));
+            }
+            if(res.user) {
+               loadingDispatch(false);
+               loggedInDispatch(true);
+            }
+         });
+   };
+
+   if(loading) { return <Spinner /> }
 
    return (
       <section className={section}>
@@ -48,58 +74,94 @@ const SignUp = () => {
                   <fieldset>
                      <label htmlFor='username'>Username</label>
                      <input
-                        id='username'
-                        className={errors.username ? error : ''}
+                        className={
+                           (errors.username || hasErrors.username) ? error : ''}
                         placeholder='Username'
                         type='text'
-                        {...register("username")}
+                        {...register('username', {
+                           required: 'Username is required',
+                           minLength: {
+                              value: 3,
+                              message: 'Username must be at least 3 characters'
+                           },
+                           maxLength: {
+                              value: 20,
+                              message: 'Username must not exceed 20 characters'
+                           },
+                        })}
                      />
-                     {errors.username && <span>{errors.username?.message}</span>}
+                     {errors.username && <span>{errors.username.message}</span>}
+                     {hasErrors.username && <span>Username {hasErrors.username[0]}</span>}
                   </fieldset>
                   <fieldset>
                      <label htmlFor='email'>Email address</label>
                      <input
-                        id='email'
-                        className={errors.email ? error : ''}
+                        className={( errors.email || hasErrors.email) ? error : ''}
                         placeholder='Email address'
                         type='email'
-                        {...register("email")}
+                        {...register("email", {
+                           required: 'Email is required',
+                           // pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                           pattern: {
+                              value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                              message: "Invalid email address"
+                           }
+                        })}
                      />
-                     {errors.email && <span>{errors.email?.message}</span>}
+                     {errors.email && <span>{errors.email.message}</span>}
+                     {hasErrors.email && <span>Email {hasErrors.email[0]}</span>}
                   </fieldset>
                   <fieldset>
                      <label htmlFor='password'>Password</label>
                      <input
-                        id='password'
                         className={errors.password ? error : ''}
                         placeholder='Password'
                         type='password'
-                        {...register("password")}
+                        {...register('password', {
+                           required: 'Password is required',
+                           minLength: {
+                              value: 6,
+                              message: 'Password must be at least 6 characters'
+                           },
+                           maxLength: {
+                              value: 40,
+                              message: 'Password must not exceed 40 characters'
+                           },
+                        })}
                      />
-                     {errors.password && <span>{errors.password?.message}</span>}
+                     {errors.password && <span>{errors.password.message}</span>}
                   </fieldset>
                   <fieldset>
                      <label htmlFor='confirmPassword'>Repeat Password</label>
                      <input
-                        id='confirmPassword'
                         className={errors.confirmPassword ? error : ''}
                         placeholder='Password'
                         type='password'
-                        {...register("confirmPassword")}
+                        {...register('confirmPassword', {
+                           required: 'Repeat Password is required',
+                           validate: {
+                              match: (value) => value === watchPassword,
+                           }
+                        })}
                      />
-                     {errors.confirmPassword && <span>{errors.confirmPassword?.message}</span>}
+                     {errors.confirmPassword &&
+                     errors.confirmPassword.type === 'match' && (
+                        <span>Password does not match</span>
+                     )}
                   </fieldset>
                   <fieldset>
                      <input
                         id='agreement'
                         className={errors.agreement ? error : ''}
                         type='checkBox'
-                        {...register("agreement")}
+                        {...register('agreement', {
+                           required: 'Agreement is required',
+                        })}
                      />
                      <label htmlFor='agreement'>
                         I agree to the processing of my personal information
                      </label>
-                     {errors.agreement && <span>{errors.agreement?.message}</span>}
+                     {errors.agreement && <span>{errors.agreement.message}</span>}
                   </fieldset>
                   <button type='submit'>Create</button>
                </form>
@@ -115,4 +177,23 @@ const SignUp = () => {
    );
 };
 
-export default SignUp;
+SignUp.propTypes = {
+   auth: PropTypes.shape({
+      loading: PropTypes.bool.isRequired
+   }).isRequired,
+   loadingDispatch: PropTypes.func.isRequired,
+   loggedInDispatch: PropTypes.func.isRequired,
+   addUserDispatch: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = ({auth}) => ({auth});
+const mapDispatchToProps = {
+   addUserDispatch: addUser,
+   loadingDispatch: authLoading,
+   loggedInDispatch: loggedIn,
+};
+
+export default connect(
+   mapStateToProps,
+   mapDispatchToProps
+)(SignUp);

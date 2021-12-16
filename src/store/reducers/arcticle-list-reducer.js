@@ -1,6 +1,6 @@
-import { ARTICLE_LIST } from '../actions-types';
+import actionTypes from '../actions-types';
 
-const { LOADING, LOADED, PAGE_CHANGED, HAS_ERROR } = ARTICLE_LIST;
+const { LOADING, LOADED, PAGE_CHANGED, HAS_ERROR } = actionTypes.ARTICLE_LIST;
 
 const initialState = {
   isLoading: true,

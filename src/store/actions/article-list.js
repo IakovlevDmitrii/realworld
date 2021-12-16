@@ -1,21 +1,30 @@
-import { ARTICLE_LIST } from '../actions-types';
+import actionTypes from '../actions-types';
 
-const { LOADING, LOADED, HAS_ERROR, PAGE_CHANGED } = ARTICLE_LIST;
+const { LOADING, LOADED, HAS_ERROR, PAGE_CHANGED } = actionTypes.ARTICLE_LIST;
 
-export const listLoading = () => ({
+const listLoading = () => ({
   type: LOADING,
 });
 
-export const listLoaded = (articles) => ({
+const listLoaded = (articles) => ({
   type: LOADED,
   payload: articles,
 });
 
-export const listHasError = () => ({
+const listHasError = () => ({
   type: HAS_ERROR,
 });
 
-export const listPageChanged = (articleListPage) => ({
+const listPageChanged = (articleListPage) => ({
   type: PAGE_CHANGED,
   payload: articleListPage,
 });
+
+const articleListActions = {
+  listLoading,
+  listLoaded,
+  listHasError,
+  listPageChanged,
+};
+
+export default articleListActions;

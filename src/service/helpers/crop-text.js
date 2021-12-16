@@ -1,3 +1,4 @@
+// Функция обрезает текс до 170-и символов
 const cropText = (text) => {
   const redExp = /.{170}\S*/s;
 
