@@ -1,6 +1,6 @@
-// const BASE_URL = 'https://conduit.productionready.io/api';
+const BASE_URL = 'https://conduit.productionready.io/api';
 // const BASE_URL = 'http://kata.academy:8022/api';
-const BASE_URL = 'https://api.realworld.io/api';
+// const BASE_URL = 'https://api.realworld.io/api';
 
 // user: {
 //    username: "aaaf",
@@ -24,6 +24,12 @@ const BASE_URL = 'https://api.realworld.io/api';
 // image: "https://api.realworld.io/images/smiley-cyrus.jpeg"
 // token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5hYWFhIiwidXNlcm5hbWUiOiJhYWFmZmZmIiwiYmlvIjpudWxsLCJpbWFnZSI6Imh0dHBzOi8vYXBpLnJlYWx3b3JsZC5pby9pbWFnZXMvc21pbGV5LWN5cnVzLmpwZWciLCJpYXQiOjE2MzgxODA1NzQsImV4cCI6MTY0MzM2NDU3NH0.dLN_r6RwzTyxIy1xINznHQDDBvnOf9oHAjfcjoNuc0I"
 // username: "aaaffff"
+
+// bio: null
+// email: "aaaa@a.aaa"
+// image: "https://api.realworld.io/images/smiley-cyrus.jpeg"
+// token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFhYWFAYS5hYWEiLCJ1c2VybmFtZSI6ImFhYWZhYWFmZiIsImJpbyI6bnVsbCwiaW1hZ2UiOiJodHRwczovL2FwaS5yZWFsd29ybGQuaW8vaW1hZ2VzL3NtaWxleS1jeXJ1cy5qcGVnIiwiaWF0IjoxNjQwMTczMDI3LCJleHAiOjE2NDUzNTcwMjd9.qHeEeC13oR7AbkG4uVxw8MLnF9A0MuGGS0RF0PMnbaM"
+// username: "aaafaaaff"
 
 // const BASE_URL = 'https://cirosantilli-realworld-express.herokuapp.com/api';
 

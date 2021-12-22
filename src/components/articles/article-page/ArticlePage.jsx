@@ -1,45 +1,54 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from "react-redux";
 
+// import the service
 import realWorldApiService from '../../../service';
-import { articleActions } from "../../../store/actions";
 
+// import components
+import Article from '../article';
 import Spinner from "../../spinner";
 import ErrorIndicator from "../../errors/error-indicator";
-import Article from '../article';
 
+// import styles
 import styles from './ArticlePage.module.scss';
 
-const { Articles } = realWorldApiService;
-const {
-   slugChanged,
-   articleLoading,
-   articleLoaded,
-   articleHasError
-} = articleActions;
-const { section, container } = styles;
+const ArticlePage = ({ slug, slugChanged }) => {
 
-const ArticlePage = ({
-   articlePage,
-   loadingDispatch,
-   loadedDispatch,
-   hasErrorDispatch,
-   slugChangedDispatch
-}) => {
+   // to store an article data
+   const [ article, setArticle ] = useState({});
 
-   const { isLoading, hasError, article } = articlePage;
-   const { slug } = article;
+   // to catch errors
+   const [ hasError, setHasError ] = useState(false);
 
+   // to render the loading indicator
+   const [ isLoading, setIsLoading ] = useState(true);
+
+   // when changing the slug
    const loadArticle = useCallback(
       () => {
-         loadingDispatch();
+         // to render the loading indicator
+         setIsLoading(true);
 
-         Articles.get(slug)
-            .then((data) => loadedDispatch(data))
-            .catch(() => hasErrorDispatch())
+         // article upload request
+         realWorldApiService
+            .Articles
+            .get(slug)
+            .then((data) => {
+               // to save an article
+               setArticle(data);
+
+               // to stop the loading indicator
+               setIsLoading(false);
+            })
+            .catch(() => {
+               // to catch errors
+               setHasError(true);
+
+               // to stop the loading indicator
+               setIsLoading(false);
+            })
       },
-      [ slug, loadingDispatch, loadedDispatch, hasErrorDispatch ]
+      [ slug ]
    );
 
    useEffect(
@@ -51,49 +60,20 @@ const ArticlePage = ({
    if(hasError) { return <ErrorIndicator /> }
 
    return (
-      <section className={section}>
-         <div className={container}>
+      <section className={styles.section}>
+         <div className={styles.container}>
             <Article
                articleData={article}
-               slugChangedDispatch={slugChangedDispatch}
-               isPreview={false}
-            />
+               slugChanged={slugChanged}
+               isPreview={false} />
          </div>
       </section>
    )
 };
 
 ArticlePage.propTypes = {
-   articlePage: PropTypes.shape({
-      isLoading: PropTypes.bool.isRequired,
-      hasError: PropTypes.bool.isRequired,
-      article: PropTypes.oneOfType([
-         PropTypes.bool,
-         PropTypes.shape({
-            author: PropTypes.objectOf(PropTypes.string),
-            body: PropTypes.string,
-            createdAt: PropTypes.string,
-            favorited: PropTypes.bool,
-            favoritesCount: PropTypes.number,
-            slug: PropTypes.string.isRequired,
-            tagList: PropTypes.arrayOf(PropTypes.string),
-            title: PropTypes.string
-         })
-      ])
-   }).isRequired,
-   loadingDispatch: PropTypes.func.isRequired,
-   loadedDispatch: PropTypes.func.isRequired,
-   hasErrorDispatch: PropTypes.func.isRequired,
-   slugChangedDispatch: PropTypes.func.isRequired,
+   slug: PropTypes.string.isRequired,
+   slugChanged: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ articlePage }) => ({ articlePage });
-
-const mapDispatchToProps = {
-   loadingDispatch: articleLoading,
-   loadedDispatch: articleLoaded,
-   hasErrorDispatch: articleHasError,
-   slugChangedDispatch: slugChanged
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ArticlePage);
+export default ArticlePage;

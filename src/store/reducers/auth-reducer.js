@@ -1,37 +1,37 @@
 import actionTypes from '../actions-types';
 
-const { ADD_USER, LOADING, LOGGED_IN } = actionTypes.AUTH;
+const { ADD_USER } = actionTypes.auth;
 
 const initialState = {
-  loading: false,
-  loggedIn: false,
   user: {},
+  isLoggedIn: false,
 };
 
 const auth = (state = initialState, action) => {
-  switch (action.type) {
-    case ADD_USER:
-      return {
-        loading: false,
-        loggedIn: true,
-        user: action.payload.user,
-      };
-
-    case LOADING:
-      return {
-        ...state,
-        loading: action.payload.loading,
-      };
-
-    case LOGGED_IN:
-      return {
-        ...state,
-        loggedIn: action.payload.loggedIn,
-      };
-
-    default:
-      return state;
+  // switch (action.type) {
+  //    case ADD_USER:
+  //       return {
+  //          user: action.payload.user,
+  //          isLoggedIn: true,
+  //       };
+  //
+  //    case IS_LOGGED_IN:
+  //       return {
+  //          ...state,
+  //          loggedIn: action.payload.loggedIn,
+  //       };
+  //
+  //    default:
+  //       return state;
+  // }
+  if (action.type === ADD_USER) {
+    return {
+      user: action.payload.user,
+      isLoggedIn: true,
+    };
   }
+
+  return state;
 };
 
 export default auth;

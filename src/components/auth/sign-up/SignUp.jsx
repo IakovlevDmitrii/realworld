@@ -1,67 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+
 import realWorldApiService from '../../../service';
-import { authActions } from '../../../store/actions';
+import authActions from '../../../store/actions';
+
 import Spinner from "../../spinner";
+
 import styles from './SignUp.module.scss';
-import src from './images/User.png';
 
-const { addUser, authLoading, loggedIn } = authActions;
-const { section, container, content, title, error, authLink, link } = styles;
+const { addUser } = authActions;
+const {
+   section, container, content, title, error, authLink, link
+} = styles;
 
-const SignUp = ({
-   auth,
-   addUserDispatch,
-   loadingDispatch,
-   loggedInDispatch
-}) => {
-
-   const { loading } = auth;
+const SignUp = ({ addUserDispatch }) => {
+   const [ isLoading, setIsLoading ] = useState(false);
    const [ hasErrors, setHasError ] = useState({});
-   const { register, handleSubmit, watch, formState: {errors} } = useForm();
 
+   useEffect(() => (
+      () => {setHasError({})}
+   ), []);
+
+   const { register, handleSubmit, watch, formState: {errors} } = useForm();
    const watchPassword = watch('password');
 
-   // удалить
-   const user = {
-      email: "a@a.a",
-      token: "react",
-      username: "John Duo",
-      bio: "hello",
-      image: src
-   };
-
    const onSubmit = (data) => {
-      setHasError({});
-      loadingDispatch(true);
-
       const { username, email, password } = data;
 
+      setIsLoading(true);
       realWorldApiService
          .Auth
          .register(username, email, password)
          .then((res) => {
-            if(res.errors) {
-               setHasError(res.errors);
-               loadingDispatch(false);
-
-               // перенести в if(res.user)
-               addUserDispatch(user);
-
-               window.localStorage
-                  .setItem('user', JSON.stringify(user));
-            }
-            if(res.user) {
-               loadingDispatch(false);
-               loggedInDispatch(true);
-            }
-         });
+            if(res.user) {addUserDispatch(res.user)}
+            if(res.errors) {setHasError(res.errors)}
+            setIsLoading(false);
+         })
+         .catch(err => { throw new Error(err.message) });
    };
 
-   if(loading) { return <Spinner /> }
+   if(isLoading) { return <Spinner /> }
 
    return (
       <section className={section}>
@@ -178,22 +159,14 @@ const SignUp = ({
 };
 
 SignUp.propTypes = {
-   auth: PropTypes.shape({
-      loading: PropTypes.bool.isRequired
-   }).isRequired,
-   loadingDispatch: PropTypes.func.isRequired,
-   loggedInDispatch: PropTypes.func.isRequired,
-   addUserDispatch: PropTypes.func.isRequired,
+   addUserDispatch: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({auth}) => ({auth});
 const mapDispatchToProps = {
    addUserDispatch: addUser,
-   loadingDispatch: authLoading,
-   loggedInDispatch: loggedIn,
 };
 
 export default connect(
-   mapStateToProps,
+   null,
    mapDispatchToProps
 )(SignUp);

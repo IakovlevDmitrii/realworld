@@ -1,15 +1,20 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 
+// import component
+import PersonDetails from "../person-details";
+
+// import styles
 import styles from "./Article.module.scss";
 import favoriteTrueImage from "./images/favorite-true.png";
 import favoriteFalseImage from "./images/favorite-false.png";
-import PersonDetails from "../../person-details";
 
-const { content, articleInfo } = styles;
-
-const Article = ({ articleData, slugChangedDispatch, isPreview }) => {
+const Article = ({
+   articleData,
+   slugChanged,
+   isPreview
+}) => {
    const {
       author, body, createdAt, favorited, favoritesCount, slug, tagList, title
    } = articleData;
@@ -18,7 +23,7 @@ const Article = ({ articleData, slugChangedDispatch, isPreview }) => {
       ? (
          <Link
             to={`/articles/:${slug}`}
-            onClick={() => slugChangedDispatch(slug)}>
+            onClick={() => slugChanged(slug)}>
             <h2>{title}</h2>
          </Link> )
       : (
@@ -31,9 +36,9 @@ const Article = ({ articleData, slugChangedDispatch, isPreview }) => {
    ));
 
    return (
-      <article className={content}>
+      <article className={styles.content}>
          <div className={styles.article}>
-            <div className={articleInfo}>
+            <div className={styles.info}>
                <div className={styles.title}>
                   {articleTitle}
                   <div className={styles.favorites}>
@@ -78,7 +83,7 @@ Article.propTypes = {
       tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
       title: PropTypes.string.isRequired,
    }).isRequired,
-   slugChangedDispatch: PropTypes.func.isRequired,
+   slugChanged: PropTypes.func.isRequired,
    isPreview: PropTypes.bool.isRequired,
 };
 

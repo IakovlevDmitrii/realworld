@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import classNames from 'classnames';
+
+// import styles
 import src from './image/User.png';
 import styles from './Header.module.scss';
 
@@ -11,20 +13,23 @@ const {
    authButtonActive,
    personInfo,
    personName,
-   personImage,
+   personImage
 } = styles;
 
 const link = classNames({
    [authButton]: true,
-   [authButtonActive]: false,
+   [authButtonActive]: false
 });
 
 const Header = ({ auth }) => {
+   const clearLocalStorage = () => {
+      window.localStorage.clear();
+   };
 
    const getLinksToShow = () => {
-      const { loggedIn } = auth;
+      const { isLoggedIn } = auth;
 
-      if(loggedIn) {
+      if(isLoggedIn) {
          const { user } = auth;
 
          return (
@@ -41,7 +46,7 @@ const Header = ({ auth }) => {
                <button
                   type='button'
                   className={link}
-                  onClick={localStorage.clear()}>Log Out</button>
+                  onClick={clearLocalStorage}>Log Out</button>
             </>
          )
       }
@@ -76,7 +81,7 @@ Header.propTypes = {
          username: PropTypes.string,
          image: PropTypes.string,
       }),
-      loggedIn: PropTypes.bool.isRequired,
+      isLoggedIn: PropTypes.bool.isRequired,
    }),
 };
 

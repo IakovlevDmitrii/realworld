@@ -1,80 +1,96 @@
-import React, { useEffect, useCallback } from 'react';
-import { connect } from "react-redux";
-import { Pagination } from 'antd';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
+import { Pagination } from 'antd';
+
+// import components
+import Article from '../article';
 import Spinner from "../../spinner";
 import ErrorIndicator from "../../errors/error-indicator";
-import Article from '../article';
 
+// import the service
 import realWorldApiService from '../../../service';
-import { articleActions, articleListActions } from '../../../store/actions';
 
+// import styles
 import 'antd/dist/antd.css';
-import './styles/pagination.css';
-import styles from './styles/ArticleList.module.scss';
+import './pagination.css';
+import styles from './ArticleList.module.scss';
 
-const { slugChanged } = articleActions;
-const { listLoading, listLoaded, listHasError, listPageChanged } = articleListActions;
-const { section, container, content, list, item, pagination } = styles;
+const { section, pagination } = styles;
 
-const ArticleList = ({
-   articleList,
-   loadingDispatch,
-   loadedDispatch,
-   hasErrorDispatch,
-   pageChangedDispatch,
-   slugChangedDispatch
-}) => {
+const ArticleList = ({ slugChanged }) => {
 
-   const {
-      isLoading, hasError, articles, articlesCount, articleListPage
-   } = articleList;
+   // articles page number
+   const [ page, setPage ] = useState(1);
 
+   // number of articles
+   const [ count, setCount ] = useState(0);
+
+   // to catch errors
+   const [ hasError, setHasError ] = useState(false);
+
+   // to render the loading indicator
+   const [ isLoading, setIsLoading ] = useState(true);
+
+   // to store a list of articles
+   const [ articleList, setArticleList ] = useState([]);
+
+   // when changing the page number of articles
    const loadArticleList = useCallback(
       () => {
-         loadingDispatch();
+         // to render the loading indicator
+         setIsLoading(true);
 
+         // articles upload request
          realWorldApiService
-            .Articles.all(articleListPage)
-            .then((data) => ( loadedDispatch(data) ))
-            .catch( () => hasErrorDispatch() )
+            .Articles
+            .all(page)
+            .then( ({ articles, articlesCount }) => {
+               // to save a list of articles
+               setArticleList(articles);
+
+               // to save a number of articles
+               setCount(articlesCount);
+
+               // to stop the loading indicator
+               setIsLoading(false);
+            })
+            .catch( () => {
+               // to catch errors
+               setHasError(true);
+
+               // to stop the loading indicator
+               setIsLoading(false);
+            });
       },
-      [ loadingDispatch, articleListPage, loadedDispatch, hasErrorDispatch ]
+      [ page ]
    );
 
-   useEffect(
-      () => loadArticleList(),
-      [loadArticleList]
-   );
-
-   const onPageChange = (page) => {
-      pageChangedDispatch(page)
-   };
+   useEffect(() => loadArticleList(), [loadArticleList]);
 
    if(isLoading) { return <Spinner /> }
    if(hasError) { return <ErrorIndicator /> }
 
-   const listToShow = articles.map((articleData) => (
-      <li key={articleData.slug} className={item}>
+   const listToShow = articleList.map((articleData) => (
+      <li key={articleData.slug} className={styles.item}>
          <Article
             articleData={articleData}
-            slugChangedDispatch={slugChangedDispatch}
+            slugChanged={slugChanged}
             isPreview />
       </li>
    ));
 
    return (
       <section className={section}>
-         <div className={container}>
-            <div className={content}>
-               <ul className={list}>
+         <div className={styles.container}>
+            <div className={styles.content}>
+               <ul className={styles.list}>
                   {listToShow}
                </ul>
                <Pagination
-                  current={articleListPage}
-                  onChange={onPageChange}
-                  total={articlesCount}
+                  current={page}
+                  onChange={(pageNumber) => setPage(pageNumber)}
+                  total={count}
                   hideOnSinglePage
                   pageSize="5"
                   size="small"
@@ -88,31 +104,7 @@ const ArticleList = ({
 };
 
 ArticleList.propTypes = {
-   articleList: PropTypes.shape({
-      isLoading: PropTypes.bool.isRequired,
-      hasError: PropTypes.bool.isRequired,
-      articles: PropTypes.arrayOf(PropTypes.objectOf).isRequired,
-      articlesCount: PropTypes.number.isRequired,
-      articleListPage: PropTypes.number.isRequired,
-   }).isRequired,
-   loadingDispatch: PropTypes.func.isRequired,
-   loadedDispatch: PropTypes.func.isRequired,
-   hasErrorDispatch: PropTypes.func.isRequired,
-   pageChangedDispatch: PropTypes.func.isRequired,
-   slugChangedDispatch: PropTypes.func.isRequired,
+   slugChanged: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ articleList }) => ({ articleList });
-
-const mapDispatchToProps = {
-   loadingDispatch: listLoading,
-   loadedDispatch: listLoaded,
-   hasErrorDispatch: listHasError,
-   pageChangedDispatch: listPageChanged,
-   slugChangedDispatch: slugChanged
-};
-
-export default connect(
-   mapStateToProps,
-   mapDispatchToProps
-)(ArticleList);
+export default ArticleList;
