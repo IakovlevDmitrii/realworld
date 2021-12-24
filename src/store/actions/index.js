@@ -1,3 +1,4 @@
 import authActions from './auth';
+import articleActions from './article';
 
-export default authActions;
+export { authActions, articleActions };

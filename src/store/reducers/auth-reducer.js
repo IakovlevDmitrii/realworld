@@ -1,6 +1,6 @@
 import actionTypes from '../actions-types';
 
-const { ADD_USER } = actionTypes.auth;
+const { ADD_USER, LOG_OUT } = actionTypes.auth;
 
 const initialState = {
   user: {},
@@ -8,30 +8,19 @@ const initialState = {
 };
 
 const auth = (state = initialState, action) => {
-  // switch (action.type) {
-  //    case ADD_USER:
-  //       return {
-  //          user: action.payload.user,
-  //          isLoggedIn: true,
-  //       };
-  //
-  //    case IS_LOGGED_IN:
-  //       return {
-  //          ...state,
-  //          loggedIn: action.payload.loggedIn,
-  //       };
-  //
-  //    default:
-  //       return state;
-  // }
-  if (action.type === ADD_USER) {
-    return {
-      user: action.payload.user,
-      isLoggedIn: true,
-    };
-  }
+  switch (action.type) {
+    case ADD_USER:
+      return {
+        user: action.payload.user,
+        isLoggedIn: true,
+      };
 
-  return state;
+    case LOG_OUT:
+      return initialState;
+
+    default:
+      return state;
+  }
 };
 
 export default auth;

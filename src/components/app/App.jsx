@@ -8,7 +8,8 @@ import Header from '../header';
 import SignIn from "../auth/sign-in";
 import SignUp from "../auth/sign-up";
 import Profile from '../auth/profile';
-import Articles from '../articles/Articles';
+import ArticleList from "../articles/article-list";
+import ArticlePage from '../articles/article-page/ArticlePage';
 
 import styles from './styles/app.module.scss';
 
@@ -17,9 +18,12 @@ const App = ({ auth }) => (
       <Header />
       <main>
          <Switch>
-            <Route path='/articles' component={Articles} />
-            <Route path='/sign-in' component={SignIn} />
-            <Route path="/sign-up">
+            <Route path='/articles/:slug' component={ArticlePage} />
+            <Route path='/articles' component={ArticleList} />
+            <Route path='/sign-in'>
+               {auth.isLoggedIn ? <Redirect to="/articles" /> : <SignIn />}
+            </Route>
+            <Route path='/sign-up'>
                {auth.isLoggedIn ? <Redirect to="/articles" /> : <SignUp />}
             </Route>
             <Route path='/profile' component={Profile} />

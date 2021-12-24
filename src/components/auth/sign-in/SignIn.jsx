@@ -1,20 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+
+import realWorldApiService from '../../../service';
+import { authActions } from '../../../store/actions';
+
+import Spinner from "../../spinner";
+
 import styles from './SignIn.module.scss';
 
-const {
-   section, container, content, title, error, authLink, link
-} = styles;
+const { addUser } = authActions;
+const { section, container, content, title, error, authLink, link } = styles;
 
-const SignIn = () => {
+const SignIn = ({ addUserDispatch }) => {
+   const [ isLoading, setIsLoading ] = useState(false);
+   const [ hasErrors, setHasError ] = useState({});
 
-   const { register, handleSubmit, formState: {errors, isValid} } = useForm({
-      mode: 'onChange',
-      delayError: 700,
-   });
+   useEffect(() => (
+      () => {setHasError({})}
+   ), []);
 
-   const onSubmit = data => console.log(data);
+   const { register, handleSubmit, formState: {errors} } = useForm();
+
+   const onSubmit = (data) => {
+      const { email, password } = data;
+
+      setIsLoading(true);
+
+      realWorldApiService
+         .Auth
+         .login(email, password)
+         .then((res) => {
+            if(res.user) {addUserDispatch(res.user)}
+            if(res.errors) {
+               setHasError(res.errors)
+            }
+            setIsLoading(false);
+         })
+         .catch(err => { throw new Error(err.message) });
+   };
+
+   if(isLoading) { return <Spinner /> }
 
    return (
       <section className={section}>
@@ -27,26 +55,36 @@ const SignIn = () => {
                   <fieldset>
                      <label htmlFor='email'>Email address</label>
                      <input
-                        id='email'
-                        className={errors.email ? error : ''}
+                        className={
+                           (errors.email || hasErrors['email or password'] ) ? error : ''}
                         placeholder="Email address"
                         type='email'
-                        {...register("email")}
+                        {...register("email", {
+                           required: 'Email is required',
+                           pattern: {
+                              value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                              message: "Invalid email address"
+                           }
+                        })}
                      />
-                     {errors.email &&<span>{errors.email?.message}</span>}
+                     {errors.email && <span>{errors.email.message}</span>}
+                     {hasErrors['email or password'] && <span>Email  or password {hasErrors['email or password'][0]}</span>}
                   </fieldset>
                   <fieldset>
                      <label htmlFor='password'>Password</label>
                      <input
-                        id='password'
-                        className={errors.password ? error : ''}
+                        className={
+                           (errors.password || hasErrors['email or password'] ) ? error : ''}
                         placeholder="Password"
                         type='password'
-                        {...register("password")}
+                        {...register('password', {
+                           required: 'Password is required',
+                        })}
                      />
-                     {errors.password &&<span>{errors.password?.message}</span>}
+                     {errors.password && <span>{errors.password.message}</span>}
+                     {hasErrors['email or password'] && <span>Email  or password {hasErrors['email or password'][0]}</span>}
                   </fieldset>
-                  <button type='submit' disabled={!isValid}>Login</button>
+                  <button type='submit'>Login</button>
                </form>
                <div className={authLink}>
                   <div>Don’t have an account?</div>
@@ -60,4 +98,15 @@ const SignIn = () => {
    )
 };
 
-export default SignIn;
+SignIn.propTypes = {
+   addUserDispatch: PropTypes.func.isRequired
+};
+
+const mapDispatchToProps = {
+   addUserDispatch: addUser,
+};
+
+export default connect(
+   null,
+   mapDispatchToProps
+)(SignIn);

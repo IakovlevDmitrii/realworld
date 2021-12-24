@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
-
 import { Pagination } from 'antd';
 
 // import components
@@ -18,8 +16,7 @@ import styles from './ArticleList.module.scss';
 
 const { section, pagination } = styles;
 
-const ArticleList = ({ slugChanged }) => {
-
+const ArticleList = () => {
    // articles page number
    const [ page, setPage ] = useState(1);
 
@@ -73,10 +70,7 @@ const ArticleList = ({ slugChanged }) => {
 
    const listToShow = articleList.map((articleData) => (
       <li key={articleData.slug} className={styles.item}>
-         <Article
-            articleData={articleData}
-            slugChanged={slugChanged}
-            isPreview />
+         <Article articleData={articleData} isPreview />
       </li>
    ));
 
@@ -101,10 +95,6 @@ const ArticleList = ({ slugChanged }) => {
          </div>
       </section>
    )
-};
-
-ArticleList.propTypes = {
-   slugChanged: PropTypes.func.isRequired
 };
 
 export default ArticleList;

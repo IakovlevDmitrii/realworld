@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 
 // import the service
@@ -12,10 +13,11 @@ import ErrorIndicator from "../../errors/error-indicator";
 // import styles
 import styles from './ArticlePage.module.scss';
 
-const ArticlePage = ({ slug, slugChanged }) => {
+const ArticlePage = ({ article }) => {
+   const { slug } = article;
 
    // to store an article data
-   const [ article, setArticle ] = useState({});
+   const [ articleData, setArticleData ] = useState({});
 
    // to catch errors
    const [ hasError, setHasError ] = useState(false);
@@ -35,7 +37,7 @@ const ArticlePage = ({ slug, slugChanged }) => {
             .get(slug)
             .then((data) => {
                // to save an article
-               setArticle(data);
+               setArticleData(data);
 
                // to stop the loading indicator
                setIsLoading(false);
@@ -62,18 +64,21 @@ const ArticlePage = ({ slug, slugChanged }) => {
    return (
       <section className={styles.section}>
          <div className={styles.container}>
-            <Article
-               articleData={article}
-               slugChanged={slugChanged}
-               isPreview={false} />
+            <Article articleData={articleData} isPreview={false} />
          </div>
       </section>
    )
 };
 
 ArticlePage.propTypes = {
-   slug: PropTypes.string.isRequired,
-   slugChanged: PropTypes.func.isRequired
+
+   article: PropTypes.shape({
+      slug: PropTypes.string.isRequired,
+   }).isRequired,
 };
 
-export default ArticlePage;
+const mapStateToProps = ({ article }) => ({ article });
+
+export default connect(
+   mapStateToProps,
+)(ArticlePage);

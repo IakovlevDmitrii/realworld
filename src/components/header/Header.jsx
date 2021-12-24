@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import classNames from 'classnames';
+import { Link, NavLink } from "react-router-dom";
+
+// import action creators
+import { authActions } from '../../store/actions';
 
 // import styles
 import src from './image/User.png';
@@ -16,15 +18,9 @@ const {
    personImage
 } = styles;
 
-const link = classNames({
-   [authButton]: true,
-   [authButtonActive]: false
-});
+const { logOut } = authActions;
 
-const Header = ({ auth }) => {
-   const clearLocalStorage = () => {
-      window.localStorage.clear();
-   };
+const Header = ({ auth, logOutDispatch }) => {
 
    const getLinksToShow = () => {
       const { isLoggedIn } = auth;
@@ -45,20 +41,26 @@ const Header = ({ auth }) => {
                </Link>
                <button
                   type='button'
-                  className={link}
-                  onClick={clearLocalStorage}>Log Out</button>
+                  className={authButton}
+                  onClick={logOutDispatch}>Log Out</button>
             </>
          )
       }
 
       return (
          <>
-            <Link to='/sign-in' className={link}>
+            <NavLink
+               to="/sign-in"
+               className={authButton}
+               activeClassName={authButtonActive}>
                Sign In
-            </Link>
-            <Link to='/sign-up' className={link}>
+            </NavLink>
+            <NavLink
+               to="/sign-up"
+               className={authButton}
+               activeClassName={authButtonActive}>
                Sign Up
-            </Link>
+            </NavLink>
          </>
       )
    };
@@ -83,6 +85,7 @@ Header.propTypes = {
       }),
       isLoggedIn: PropTypes.bool.isRequired,
    }),
+   logOutDispatch: PropTypes.func.isRequired,
 };
 
 Header.defaultProps = {
@@ -95,5 +98,11 @@ Header.defaultProps = {
 };
 
 const mapStateToProps = ({auth}) => ({auth});
+const mapDispatchToProps = {
+   logOutDispatch: logOut,
+};
 
-export default connect(mapStateToProps)(Header);
+export default connect(
+   mapStateToProps,
+   mapDispatchToProps
+)(Header);

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import realWorldApiService from '../../../service';
-import authActions from '../../../store/actions';
+import { authActions } from '../../../store/actions';
 
 import Spinner from "../../spinner";
 
@@ -31,6 +31,7 @@ const SignUp = ({ addUserDispatch }) => {
       const { username, email, password } = data;
 
       setIsLoading(true);
+
       realWorldApiService
          .Auth
          .register(username, email, password)
