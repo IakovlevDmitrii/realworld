@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
 
-const BASE_URL = 'https://conduit.productionready.io/api';
+// const BASE_URL = 'https://conduit.productionready.io/api';
 // const BASE_URL = 'http://kata.academy:8022/api';
-// const BASE_URL = 'https://api.realworld.io/api';
+const BASE_URL = 'https://api.realworld.io/api';
 
 // const BASE_URL = 'https://cirosantilli-realworld-express.herokuapp.com/api';
 
@@ -31,8 +31,6 @@ const cropText = (text) => {
   return text.length > 170 ? `${text.match(redExp)} ...` : text;
 };
 
-/* Функция для создания запроса на получение данных,
-используя Fetch API, и получения JSON файла из ответа */
 const getResource = async (url) => {
   try {
     const response = await fetch(url);
@@ -43,11 +41,11 @@ const getResource = async (url) => {
 };
 
 const getArticle = async (segment) => {
+  const url = `${BASE_URL}/articles/${segment}`;
+
   try {
-    const URL = `${BASE_URL}/articles/${segment}`;
-    const response = await getResource(URL);
-    const { article } = response;
-    const { author, body, createdAt, favorited, favoritesCount, slug, tagList, title } = article;
+    const response = await getResource(url);
+    const { author, body, createdAt, favorited, favoritesCount, slug, tagList, title } = response.article;
 
     return {
       author: {
@@ -67,17 +65,13 @@ const getArticle = async (segment) => {
   }
 };
 
-/* Функция получает всю информацию о списке статей,
-а возвращает только ту часть, которая нам нужна */
 const getArticles = async (page) => {
-  try {
-    const URL = `${BASE_URL}/articles?limit=5&offset=${(page - 1) * 5}`;
+  const url = `${BASE_URL}/articles?limit=5&offset=${(page - 1) * 5}`;
 
-    /* Получим всю информацию о списке статей */
-    const response = await getResource(URL);
+  try {
+    const response = await getResource(url);
     const { articles, articlesCount } = response;
 
-    /* В newArticles сохраним только нужную нам информацию о статьях */
     const newArticles = articles.map((article) => {
       const { author, body, createdAt, favorited, favoritesCount, slug, tagList, title } = article;
 
@@ -105,40 +99,84 @@ const getArticles = async (page) => {
   }
 };
 
+// Запрос на регистрацию нового пользователя
 const registerUser = async (username, email, password) => {
+  const url = `${BASE_URL}/users`;
+  const data = {
+    user: {
+      username,
+      email,
+      password,
+    },
+  };
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    body: JSON.stringify(data),
+  };
+
   try {
-    const data = { user: { username, email, password } };
-
-    const response = await fetch(`${BASE_URL}/users`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify(data),
-    });
-
+    const response = await fetch(url, requestOptions);
     return response.json();
   } catch {
     throw new Error();
   }
 };
 
+// Запрос на авторизацию пользователя
 const login = async (email, password) => {
+  const url = `${BASE_URL}/users/login`;
+
+  const data = {
+    user: {
+      email,
+      password,
+    },
+  };
+
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    body: JSON.stringify(data),
+  };
+
   try {
-    const data = { user: { email, password } };
-
-    const response = await fetch(`${BASE_URL}/users/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify(data),
-    });
-
+    const response = await fetch(url, requestOptions);
     return response.json();
   } catch {
     throw new Error();
   }
 };
 
-export { cropText, getResource, getArticle, getArticles, registerUser, login };
+// Запрос на имзенение информации о пользователе
+const updateUser = async (token, userDetailsToUpdate) => {
+  const url = `${BASE_URL}/user`;
+
+  const requestBody = {
+    user: {
+      ...userDetailsToUpdate,
+    },
+  };
+
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: `Token ${token}`,
+    },
+    body: JSON.stringify(requestBody),
+  };
+
+  try {
+    const response = await fetch(url, requestOptions);
+    return response.json();
+  } catch {
+    throw new Error();
+  }
+};
+
+export { cropText, getResource, getArticle, getArticles, registerUser, login, updateUser };

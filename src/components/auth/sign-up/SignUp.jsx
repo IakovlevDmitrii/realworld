@@ -3,20 +3,24 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
 import realWorldApiService from '../../../service';
-import { authActions } from '../../../store/actions';
-
+import actionCreators from '../../../store/action-creators';
 import Spinner from "../../spinner";
 
 import styles from './SignUp.module.scss';
 
-const { addUser } = authActions;
 const {
-   section, container, content, title, error, authLink, link
+   section,
+   containerNarrow,
+   content,
+   title,
+   error,
+   formButton,
+   authLink,
+   link,
 } = styles;
 
-const SignUp = ({ addUserDispatch }) => {
+const SignUp = ({ updateUser }) => {
    const [ isLoading, setIsLoading ] = useState(false);
    const [ hasErrors, setHasError ] = useState({});
 
@@ -24,8 +28,16 @@ const SignUp = ({ addUserDispatch }) => {
       () => {setHasError({})}
    ), []);
 
-   const { register, handleSubmit, watch, formState: {errors} } = useForm();
-   const watchPassword = watch('password');
+   const {
+      register,
+      handleSubmit,
+      getValues,
+      formState: {
+         errors,
+      }
+   } = useForm({
+      criteriaMode: "firstError",
+   });
 
    const onSubmit = (data) => {
       const { username, email, password } = data;
@@ -33,21 +45,24 @@ const SignUp = ({ addUserDispatch }) => {
       setIsLoading(true);
 
       realWorldApiService
-         .Auth
+         .authentication
          .register(username, email, password)
          .then((res) => {
-            if(res.user) {addUserDispatch(res.user)}
+            if(res.user) {updateUser(res.user)}
             if(res.errors) {setHasError(res.errors)}
             setIsLoading(false);
          })
-         .catch(err => { throw new Error(err.message) });
+         .catch(err => {
+            setIsLoading(false);
+            throw new Error(err.message);
+         });
    };
 
    if(isLoading) { return <Spinner /> }
 
    return (
       <section className={section}>
-         <div className={container}>
+         <div className={containerNarrow}>
             <div className={content}>
                <div className={title}>
                   <h3>Create new account</h3>
@@ -73,7 +88,8 @@ const SignUp = ({ addUserDispatch }) => {
                         })}
                      />
                      {errors.username && <span>{errors.username.message}</span>}
-                     {hasErrors.username && <span>Username {hasErrors.username[0]}</span>}
+                     {hasErrors.username && (
+                        <span>Username {hasErrors.username[0]}</span>)}
                   </fieldset>
                   <fieldset>
                      <label htmlFor='email'>Email address</label>
@@ -83,6 +99,7 @@ const SignUp = ({ addUserDispatch }) => {
                         type='email'
                         {...register("email", {
                            required: 'Email is required',
+                           // react-hook-form examples
                            // pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                            pattern: {
                               value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
@@ -114,21 +131,25 @@ const SignUp = ({ addUserDispatch }) => {
                      {errors.password && <span>{errors.password.message}</span>}
                   </fieldset>
                   <fieldset>
-                     <label htmlFor='confirmPassword'>Repeat Password</label>
+                     <label htmlFor='passwordConfirmation'>Repeat Password</label>
                      <input
-                        className={errors.confirmPassword ? error : ''}
+                        className={errors.passwordConfirmation ? error : ''}
                         placeholder='Password'
                         type='password'
-                        {...register('confirmPassword', {
+                        {...register('passwordConfirmation', {
                            required: 'Repeat Password is required',
                            validate: {
-                              match: (value) => value === watchPassword,
-                           }
+                              match: (value) => {
+                                 const { password } = getValues();
+                                 return password === value || "Password does not match";
+                              }
+                           },
                         })}
                      />
-                     {errors.confirmPassword &&
-                     errors.confirmPassword.type === 'match' && (
-                        <span>Password does not match</span>
+                     {errors.passwordConfirmation && (
+                        <span>
+                           {errors.passwordConfirmation.message}
+                        </span>
                      )}
                   </fieldset>
                   <fieldset>
@@ -145,7 +166,9 @@ const SignUp = ({ addUserDispatch }) => {
                      </label>
                      {errors.agreement && <span>{errors.agreement.message}</span>}
                   </fieldset>
-                  <button type='submit'>Create</button>
+                  <button
+                     className={formButton}
+                     type='submit'>Create</button>
                </form>
                <div className={authLink}>
                   <div>Already have an account?</div>
@@ -160,11 +183,11 @@ const SignUp = ({ addUserDispatch }) => {
 };
 
 SignUp.propTypes = {
-   addUserDispatch: PropTypes.func.isRequired
+   updateUser: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = {
-   addUserDispatch: addUser,
+   updateUser: actionCreators.authentication.updateUser,
 };
 
 export default connect(

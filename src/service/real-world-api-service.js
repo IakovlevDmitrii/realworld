@@ -1,19 +1,20 @@
-import { registerUser, login, getArticle, getArticles } from './helpers';
+import { registerUser, login, updateUser, getArticle, getArticles } from './helpers';
 
-const Auth = {
+const authentication = {
   register: (username, email, password) => registerUser(username, email, password),
   login: (email, password) => login(email, password),
+  update: (token, args) => updateUser(token, args),
 };
 
-const Articles = {
+const articles = {
   all: (page) => getArticles(page),
   get: (slug) => getArticle(slug),
 };
 
 class RealWorldApiService {
-  Articles = Articles;
+  articles = articles;
 
-  Auth = Auth;
+  authentication = authentication;
 }
 
 const realWorldApiService = new RealWorldApiService();

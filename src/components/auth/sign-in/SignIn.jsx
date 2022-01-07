@@ -5,16 +5,35 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import realWorldApiService from '../../../service';
-import { authActions } from '../../../store/actions';
+import actionCreators from '../../../store/action-creators';
 
 import Spinner from "../../spinner";
 
 import styles from './SignIn.module.scss';
 
-const { addUser } = authActions;
-const { section, container, content, title, error, authLink, link } = styles;
+const {
+   section,
+   containerNarrow,
+   content,
+   title,
+   error,
+   formButton,
+   authLink,
+   link,
+} = styles;
 
-const SignIn = ({ addUserDispatch }) => {
+const SignIn = ({ updateUser }) => {
+   const {
+      register,
+      handleSubmit,
+      formState: {
+         errors,
+         isValid,
+      },
+   } = useForm({
+      mode: 'onChange',
+   });
+
    const [ isLoading, setIsLoading ] = useState(false);
    const [ hasErrors, setHasError ] = useState({});
 
@@ -22,18 +41,16 @@ const SignIn = ({ addUserDispatch }) => {
       () => {setHasError({})}
    ), []);
 
-   const { register, handleSubmit, formState: {errors} } = useForm();
-
    const onSubmit = (data) => {
       const { email, password } = data;
 
       setIsLoading(true);
 
       realWorldApiService
-         .Auth
+         .authentication
          .login(email, password)
          .then((res) => {
-            if(res.user) {addUserDispatch(res.user)}
+            if(res.user) {updateUser(res.user)}
             if(res.errors) {
                setHasError(res.errors)
             }
@@ -46,7 +63,7 @@ const SignIn = ({ addUserDispatch }) => {
 
    return (
       <section className={section}>
-         <div className={container}>
+         <div className={containerNarrow}>
             <div className={content}>
                <div className={title}>
                   <h3>Sign In</h3>
@@ -84,7 +101,10 @@ const SignIn = ({ addUserDispatch }) => {
                      {errors.password && <span>{errors.password.message}</span>}
                      {hasErrors['email or password'] && <span>Email  or password {hasErrors['email or password'][0]}</span>}
                   </fieldset>
-                  <button type='submit'>Login</button>
+                  <button
+                     disabled={!isValid}
+                     className={formButton}
+                     type='submit'>Login</button>
                </form>
                <div className={authLink}>
                   <div>Don’t have an account?</div>
@@ -99,11 +119,11 @@ const SignIn = ({ addUserDispatch }) => {
 };
 
 SignIn.propTypes = {
-   addUserDispatch: PropTypes.func.isRequired
+   updateUser: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = {
-   addUserDispatch: addUser,
+   updateUser: actionCreators.authentication.updateUser,
 };
 
 export default connect(

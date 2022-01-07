@@ -3,6 +3,7 @@
 
 .header {
    position: sticky;
+   z-index: 1;
    top: 0;
    background-color: $brand_primary__1;
    box-shadow: 0 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.15);

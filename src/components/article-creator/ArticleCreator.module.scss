@@ -1,0 +1,67 @@
+@import '../app/styles/const.module';
+@import '../app/styles/form.module';
+
+.tags {
+   display: grid;
+   grid-template-columns: 1fr;
+   grid-auto-rows: minmax(28px, auto);
+
+   @media only screen and ($screen-sm) {
+      grid-template-columns: 1fr 1fr;
+   }
+}
+
+.tagsContainer {
+   display: flex;
+   flex-direction: column;
+}
+
+.tagContainer {
+   display: flex;
+   margin-bottom: 5px;
+
+   &:last-child {
+      margin-bottom: 0;
+   }
+}
+
+.buttonContainer {
+   display: flex;
+   align-items: flex-end;
+}
+
+.tagInput {
+   width: 100%;
+   max-width: 300px;
+   margin-right: 0.75rem;
+}
+
+%button {
+   border-radius: 4px;
+   font-size: 0.75rem;
+   border: 1px solid;
+
+   &:hover,
+   &:active {
+      cursor: pointer;
+   }
+}
+
+.deleteButton {
+   @extend %button;
+   width: 120px;
+   border-color: $color__4;
+   color: $color__4;
+}
+
+.addButton {
+   @extend %button;
+   width: 136px;
+   height: 2rem;
+   border-color: $brand_primary__2;
+   color: $brand_primary__2;
+
+   @media only screen and ($screen-sm) {
+      margin-left: 0.75rem;
+   }
+}

@@ -1,47 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from "react-redux";
 import { useForm } from "react-hook-form";
+import PropTypes from 'prop-types';
+import realWorldApi from '../../../service';
+import actionCreators from '../../../store/action-creators';
+import Spinner from "../../spinner";
+
 import styles from './Profile.module.scss';
 
 const {
-   section, container, content, title, error
+   section,
+   containerNarrow,
+   content,
+   title,
+   error,
+   formButton,
 } = styles;
 
-const Profile = () => {
-   // const validationSchema = Yup.object().shape({
-   //    username: Yup.string()
-   //       .required('Username is required')
-   //       .min(3, 'Username must be at least 3 characters')
-   //       .max(20, 'Username must not exceed 20 characters'),
-   //    email: Yup.string()
-   //       .required('Email is required')
-   //       .email('Email is invalid'),
-   //    password: Yup.string()
-   //       .required('Password is required')
-   //       .min(6, 'Password must be at least 6 characters')
-   //       .max(40, 'Password must not exceed 40 characters'),
-   //    avatar: Yup.string()
-   //       .url()
-         // .matches(
-         //    /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-         //    'Enter correct url!'
-         // )
-   // });
+const Profile = ({ user, updateUser }) => {
+   const { email, username, token } = user;
+   const [ isLoading, setIsLoading ] = useState(false);
+   const [ hasErrors, setHasError ] = useState({});
 
-   const {
-      register,
-      handleSubmit,
-      formState: {errors}
-   } = useForm({
-      mode: 'onSubmit',
-   });
+   const { register, handleSubmit, formState: {errors} } = useForm();
 
    const onSubmit = (data) => {
-      console.log(data);
+      const userDetailsToUpdate = {};
+
+      // Если в data есть заполненные поля сохраним их в userDetailsToUpdate
+      for (const key in data) {
+         if(data[key]
+            && Object.prototype.hasOwnProperty.call(data,key)){
+            userDetailsToUpdate[key] = data[key];
+         }
+      }
+
+      realWorldApi
+         .authentication
+         .update(token, userDetailsToUpdate)
+         .then((res) => {
+            if(res.user) {updateUser(res.user)}
+            if(res.errors) {setHasError(res.errors)}
+            setIsLoading(false);
+         })
+         .catch(err => {
+            setIsLoading(false);
+            throw new Error(err.message);
+         });
    };
+
+   if(isLoading) { return <Spinner /> }
 
    return (
       <section className={section}>
-         <div className={container}>
+         <div className={containerNarrow}>
             <div className={content}>
                <div className={title}>
                   <h3>Edit Profile</h3>
@@ -50,48 +62,73 @@ const Profile = () => {
                   <fieldset>
                      <label htmlFor='username'>Username</label>
                      <input
-                        id='username'
                         className={errors.username ? error : ''}
-                        placeholder='John Doe'
+                        placeholder={username}
                         type='text'
-                        {...register("username")}
+                        {...register('username', {
+                           // required: 'Username is required',
+                        })}
                      />
                      {errors.username && <span>{errors.username?.message}</span>}
+                     {hasErrors.username && (
+                        <span>Username {hasErrors.username[0]}</span>)}
                   </fieldset>
                   <fieldset>
                      <label htmlFor='email'>Email address</label>
                      <input
-                        id='email'
                         className={errors.email ? error : ''}
-                        placeholder='john@example.com'
+                        placeholder={email}
                         type='email'
-                        {...register("email")}
+                        {...register("email", {
+                           // required: 'Email is required',
+                           pattern: {
+                              value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                              message: "Invalid email address"
+                           }
+                        })}
                      />
-                     {errors.email && <span>{errors.email?.message}</span>}
+                     {errors.email && <span>{errors.email.message}</span>}
+                     {hasErrors.email && <span>Email {hasErrors.email[0]}</span>}
                   </fieldset>
                   <fieldset>
                      <label htmlFor='password'>New password</label>
                      <input
-                        id='password'
                         className={errors.password ? error : ''}
                         placeholder='New password'
                         type='password'
-                        {...register("password")}
+                        {...register('password', {
+                           // required: 'Password is required',
+                           minLength: {
+                              value: 6,
+                              message: 'Password must be at least 6 characters'
+                           },
+                           maxLength: {
+                              value: 40,
+                              message: 'Password must not exceed 40 characters'
+                           },
+                        })}
                      />
-                     {errors.password && <span>{errors.password?.message}</span>}
+                     {errors.password && <span>{errors.password.message}</span>}
                   </fieldset>
                   <fieldset>
                      <label htmlFor='avatar'>Avatar image (url)</label>
                      <input
-                        id='avatar'
                         className={errors.avatar ? error : ''}
                         placeholder='Avatar image'
-                        type='text'
-                        {...register("avatar")}
+                        type='url'
+                        {...register("avatar", {
+                           pattern: {
+                              // value: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
+                              value: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/,
+                              message: "Invalid url address"
+                           }
+                        })}
                      />
-                     {errors.avatar && <span>{errors.avatar?.message}</span>}
+                     {errors.avatar && <span>{errors.avatar.message}</span>}
                   </fieldset>
-                  <button type='submit'>Save</button>
+                  <button
+                     className={formButton}
+                     type='submit'>Save</button>
                </form>
             </div>
          </div>
@@ -99,4 +136,23 @@ const Profile = () => {
    );
 };
 
-export default Profile;
+Profile.propTypes = {
+   user: PropTypes.shape({
+      email: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired,
+      token: PropTypes.string.isRequired,
+   }).isRequired,
+   updateUser: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = ({ authentication }) => ({
+   user: authentication.user,
+});
+const mapDispatchToProps = {
+   updateUser: actionCreators.authentication.updateUser,
+};
+
+export default connect(
+   mapStateToProps,
+   mapDispatchToProps,
+)(Profile);

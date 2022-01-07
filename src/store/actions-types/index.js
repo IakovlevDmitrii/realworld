@@ -1,15 +1,15 @@
-const auth = {
-  ADD_USER: 'ADD_USER',
-  LOG_OUT: 'LOG_OUT',
-};
-
 const article = {
   CHANGE_SLUG: 'CHANGE_SLUG',
 };
 
+const authentication = {
+  LOG_OUT: 'LOG_OUT',
+  UPDATE_USER: 'UPDATE_USER',
+};
+
 const actionTypes = {
   article,
-  auth,
+  authentication,
 };
 
 export default actionTypes;

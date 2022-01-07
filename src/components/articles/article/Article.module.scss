@@ -1,9 +1,9 @@
 @import '../../app/styles/const.module';
 
 .content {
-   @extend %container__separate;
+   @extend %content;
+   display: flex;
    flex-direction: column;
-   box-shadow: 0 0.3rem 1rem 0 rgba(0, 0, 0, 0.15);
 
    @media only screen and ($screen-sm) {
       flex-direction: row;

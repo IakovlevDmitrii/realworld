@@ -2,51 +2,32 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 
-// import the service
 import realWorldApiService from '../../../service';
 
-// import components
 import Article from '../article';
 import Spinner from "../../spinner";
-import ErrorIndicator from "../../errors/error-indicator";
+import { ErrorIndicator } from "../../errors";
 
-// import styles
 import styles from './ArticlePage.module.scss';
 
-const ArticlePage = ({ article }) => {
-   const { slug } = article;
-
-   // to store an article data
+const ArticlePage = ({ slug }) => {
+   const [ hasError, setHasError ] = useState(false);
+   const [ isLoading, setIsLoading ] = useState(true);
    const [ articleData, setArticleData ] = useState({});
 
-   // to catch errors
-   const [ hasError, setHasError ] = useState(false);
-
-   // to render the loading indicator
-   const [ isLoading, setIsLoading ] = useState(true);
-
-   // when changing the slug
    const loadArticle = useCallback(
       () => {
-         // to render the loading indicator
          setIsLoading(true);
 
-         // article upload request
          realWorldApiService
-            .Articles
+            .articles
             .get(slug)
             .then((data) => {
-               // to save an article
                setArticleData(data);
-
-               // to stop the loading indicator
                setIsLoading(false);
             })
             .catch(() => {
-               // to catch errors
                setHasError(true);
-
-               // to stop the loading indicator
                setIsLoading(false);
             })
       },
@@ -71,13 +52,12 @@ const ArticlePage = ({ article }) => {
 };
 
 ArticlePage.propTypes = {
-
-   article: PropTypes.shape({
-      slug: PropTypes.string.isRequired,
-   }).isRequired,
+   slug: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({ article }) => ({ article });
+const mapStateToProps = ({ article }) => ({
+   slug: article.slug,
+});
 
 export default connect(
    mapStateToProps,

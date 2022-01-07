@@ -1,12 +1,4 @@
-// import cropText from '../service/helpers/crop-text';
-// import createFields from './create-fields';
-// import inputNames from './input-names';
 import loadFromLocalStorage from './load-from-local-storage';
+import saveToLocalStorage from './save-to-local-storage';
 
-// export {
-// cropText,
-// createFields,
-// inputNames,
-//    loadFromLocalStorage,
-// };
-export default loadFromLocalStorage;
+export { loadFromLocalStorage, saveToLocalStorage };

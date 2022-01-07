@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 
-// import action creators
-import { authActions } from '../../store/actions';
+import actionCreators from '../../store/action-creators';
 
-// import styles
 import src from './image/User.png';
 import styles from './Header.module.scss';
 
@@ -18,15 +16,13 @@ const {
    personImage
 } = styles;
 
-const { logOut } = authActions;
-
-const Header = ({ auth, logOutDispatch }) => {
+const Header = ({ authentication, logOut }) => {
 
    const getLinksToShow = () => {
-      const { isLoggedIn } = auth;
+      const { isLoggedIn } = authentication;
 
       if(isLoggedIn) {
-         const { user } = auth;
+         const { user } = authentication;
 
          return (
              <>
@@ -42,7 +38,7 @@ const Header = ({ auth, logOutDispatch }) => {
                <button
                   type='button'
                   className={authButton}
-                  onClick={logOutDispatch}>Log Out</button>
+                  onClick={logOut}>Log Out</button>
             </>
          )
       }
@@ -78,18 +74,18 @@ const Header = ({ auth, logOutDispatch }) => {
 };
 
 Header.propTypes = {
-   auth: PropTypes.shape({
+   authentication: PropTypes.shape({
       user: PropTypes.shape({
          username: PropTypes.string,
          image: PropTypes.string,
       }),
       isLoggedIn: PropTypes.bool.isRequired,
    }),
-   logOutDispatch: PropTypes.func.isRequired,
+   logOut: PropTypes.func.isRequired,
 };
 
 Header.defaultProps = {
-   auth: {
+   authentication: {
       user: {
          username: '',
          image: '',
@@ -97,9 +93,9 @@ Header.defaultProps = {
    }
 };
 
-const mapStateToProps = ({auth}) => ({auth});
+const mapStateToProps = ({authentication}) => ({authentication});
 const mapDispatchToProps = {
-   logOutDispatch: logOut,
+   logOut: actionCreators.authentication.logOut,
 };
 
 export default connect(

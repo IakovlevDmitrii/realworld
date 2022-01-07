@@ -36,48 +36,61 @@ $screen-xl: 'min-width: 1200px';
 $screen-xxl: 'min-width: 1400px';
 
 /* ---------- rem ---------- */
+
 html {
    font-size: 12px;
    @media only screen and ($screen-sm) {font-size: 14px;}
    @media only screen and ($screen-md) {font-size: 16px;}
    @media only screen and ($screen-lg) {font-size: 18px;}
    @media only screen and ($screen-xl) {font-size: 20px;}
-   @media only screen and ($screen-xxl) {font-size: 22px;}}
+   @media only screen and ($screen-xxl) {font-size: 22px;}
+}
 
 body {
    color: $brand_primary__5;
    font: {
       family: 'InterRegular', serif;
-      weight: 400;}
+      weight: 400;
+   }
    line-height: 1.2rem;
-   letter-spacing: 0;}
+   letter-spacing: 0;
+}
 
 /* ---------- layout ---------- */
 
 %flex_center{
    display: flex;
-   align-items: center;}
+   align-items: center;
+}
 
 %flex_center__full {
    @extend %flex_center;
-   justify-content: center;}
+   justify-content: center;
+}
+
+/* ---------- blocks ---------- */
 
 %container {
    margin-right: auto;
    margin-left: auto;
-   @media only screen and ($screen-sm) {
-      padding-right: 1rem;
-      padding-left: 1rem;
-   }
    @media only screen and ($screen-md) {width: 750px;}
-   @media only screen and ($screen-lg) {width: 940px;}}
+   @media only screen and ($screen-lg) {width: 940px;}
+}
 
-%container__separate {
-   display: flex;
+%container_narrow {
+   @extend %container;
+   max-width: 384px;
+}
+
+%container_border {
+   box-shadow: 0 0.3rem 1rem 0 rgba(0, 0, 0, 0.15);
+   border-radius: 0.2rem;
+}
+
+%content {
    background-color: $brand_primary__1;
-   border-radius: 0.2rem;}
-
-/* ---------- blocks ---------- */
+   border-radius: 0.2rem;
+}
 
 %article_button {
    @extend %flex_center__full;

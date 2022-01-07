@@ -9,8 +9,8 @@ const changeSlug = (slug) => ({
   },
 });
 
-const articleActions = {
+const article = {
   changeSlug,
 };
 
-export default articleActions;
+export default article;

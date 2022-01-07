@@ -1,15 +1,15 @@
 import actionTypes from '../actions-types';
 
-const { ADD_USER, LOG_OUT } = actionTypes.auth;
+const { LOG_OUT, UPDATE_USER } = actionTypes.authentication;
 
 const initialState = {
   user: {},
   isLoggedIn: false,
 };
 
-const auth = (state = initialState, action) => {
+const authentication = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_USER:
+    case UPDATE_USER:
       return {
         user: action.payload.user,
         isLoggedIn: true,
@@ -23,4 +23,4 @@ const auth = (state = initialState, action) => {
   }
 };
 
-export default auth;
+export default authentication;

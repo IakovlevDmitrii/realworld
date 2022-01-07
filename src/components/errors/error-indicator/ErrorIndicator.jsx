@@ -2,15 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './ErrorIndicator.module.scss';
 
-const { errorIndicator, container, content, title } = styles;
+const { section, container, content, title } = styles;
 
 const ErrorIndicator = ({ errorMessage }) => (
-   <section className={errorIndicator}>
+   <section className={section}>
       <div className={container}>
          <div className={content}>
             <div className={title}>
                <span>
-                  { errorMessage || 'Ошибка при получении данных с сервера'}
+                  {errorMessage || 'Ошибка при получении данных с сервера'}
                </span>
             </div>
          </div>

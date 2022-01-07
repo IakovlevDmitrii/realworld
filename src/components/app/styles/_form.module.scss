@@ -6,24 +6,19 @@
    @media only screen and ($screen-md) {padding-top: 3rem;}
 }
 
-.container {@extend %container;}
+.container {
+   @extend %container;
+   @extend %container_border;
+}
+
+.containerNarrow {
+   @extend %container_narrow;
+   @extend %container_border;
+}
 
 .content {
-   @extend %container__separate;
-   align-items: center;
-   flex-direction: column;
-   max-width: 384px;
-   margin-left: auto;
-   margin-right: auto;
+   @extend %content;
    padding: 2rem 1.5rem;
-   border: 1px solid $color__1;
-   box-shadow: 0 2rem 9rem 0
-   rgba(0, 0, 0, 0.07),
-   0 9px 44px rgba(0, 0, 0, 0.05),
-   0 5px 23px rgba(0, 0, 0, 0.04),
-   0 3px 13px rgba(0, 0, 0, 0.03),
-   0 2px 7px rgba(0, 0, 0, 0.02),
-   0 1px 3px rgba(0, 0, 0, 0.01);
 
    fieldset {
       display: flex;
@@ -37,9 +32,8 @@
       color: $brand_primary__5;
    }
 
-   input {
-      height: 2rem;
-      padding: 0 0.5rem;
+   input,
+   textarea {
       border: 1px solid $color__1;
       border-radius: 4px;
 
@@ -49,14 +43,24 @@
          color: $color__3;
       }
 
-      &[type~="text"],
-      &[type~="password"],
-      &[type~='email'] {font-size: 1rem;}
-
       &:focus,
       &:active {
          box-shadow: 0 0 5px 1px rgba(24, 144, 255, .5);
       }
+   }
+
+   input {
+      height: 2rem;
+      padding: 0 0.5rem;
+
+      &[type~="text"],
+      &[type~="password"],
+      &[type~='email'] {font-size: 1rem;}
+   }
+
+   textarea {
+      padding: 0.5rem;
+      font-size: 1rem;
    }
 
    span {
@@ -64,25 +68,6 @@
       font-size: 0.6rem;
       height: 1rem;
       color: $color__4;
-   }
-
-   button {
-      width: 100%;
-      height: 2rem;
-      font-size: 0.75rem;
-      color: $brand_primary__1;
-      background-color: $brand_primary__2;
-
-      &:hover:not(:disabled),
-      &:active {
-         background-color: $color__5;
-         border-color: $color__5;
-      }
-
-      &:disabled {
-         opacity: 0.6;
-         cursor: not-allowed;
-      }
    }
 }
 
@@ -102,6 +87,27 @@
 .error:not(:focus) {
    overflow: hidden;
    border: 1px solid $color__4;
+}
+
+.formButton {
+   width: 100%;
+   max-width: 320px;
+   height: 2rem;
+   font-size: 0.75rem;
+   color: $brand_primary__1;
+   background-color: $brand_primary__2;
+
+   &:hover:not(:disabled),
+   &:active {
+      background-color: $color__5;
+      border-color: $color__5;
+      cursor: pointer;
+   }
+
+   &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+   }
 }
 
 .authLink {

@@ -1,25 +1,16 @@
 @import '../../app/styles/const.module';
 
 .container {
-  @extend %container;
+   @extend %container;
 }
 
 .content {
-  @extend %flex_center;
-  flex-direction: column;
-  width: 100%;
-}
+   padding-top: 2rem;
 
-.list {
-  width: 100%;
-}
-
-.item {
-  margin-bottom: 2rem;
-
-  &:first-child {
-    margin-top: 2rem;
-  }
+   article {
+      @extend %container_border;
+      margin-bottom: 2rem;
+   }
 }
 
 //.ant-pagination-item-active {

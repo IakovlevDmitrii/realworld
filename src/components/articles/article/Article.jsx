@@ -3,21 +3,18 @@ import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
-// import component
 import PersonDetails from "../person-details";
 
-// import action creators
-import { articleActions } from '../../../store/actions';
+import actionCreators from '../../../store/action-creators';
 
-// import styles
-import styles from "./Article.module.scss";
 import favoriteTrueImage from "./images/favorite-true.png";
 import favoriteFalseImage from "./images/favorite-false.png";
+import styles from "./Article.module.scss";
 
 const Article = ({
    articleData,
    isPreview,
-   changeSlugDispatch,
+   changeSlug,
 }) => {
    const {
       author, body, createdAt, favorited, favoritesCount, slug, tagList, title
@@ -27,7 +24,7 @@ const Article = ({
       ? (
          <Link
             to={`/articles/:${slug}`}
-            onClick={() => changeSlugDispatch(slug)} >
+            onClick={() => changeSlug(slug)} >
             <h2>{title}</h2>
          </Link> )
       : (
@@ -87,12 +84,12 @@ Article.propTypes = {
       tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
       title: PropTypes.string.isRequired,
    }).isRequired,
-   changeSlugDispatch: PropTypes.func.isRequired,
+   changeSlug: PropTypes.func.isRequired,
    isPreview: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = {
-   changeSlugDispatch: articleActions.changeSlug,
+   changeSlug: actionCreators.article.changeSlug,
 };
 
 export default connect(
