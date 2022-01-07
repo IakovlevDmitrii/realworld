@@ -19,9 +19,9 @@ const {
 const Header = ({ authentication, logOut }) => {
 
    const getLinksToShow = () => {
-      const { isLoggedIn } = authentication;
+      // const { isLoggedIn } = authentication;
 
-      if(isLoggedIn) {
+      if(authentication.isLoggedIn) {
          const { user } = authentication;
 
          return (
