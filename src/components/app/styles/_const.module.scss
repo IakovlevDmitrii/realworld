@@ -92,21 +92,6 @@ body {
    border-radius: 0.2rem;
 }
 
-%article_button {
-   @extend %flex_center__full;
-   padding: 0.25rem 0.5rem;
-   text-align: center;
-   font-size: 1rem;
-   cursor: pointer;
-   border: 1px solid rgba(0, 0, 0, 0.75);
-   border-radius: 5px;
-
-   &:hover {
-      color: $brand_primary__3;
-      border-color: $brand_primary__3;
-   }
-}
-
 %auth_button {
    @extend %flex_center__full;
    height: 2.5rem;

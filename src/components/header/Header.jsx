@@ -19,17 +19,21 @@ const {
 const Header = ({ authentication, logOut }) => {
 
    const getLinksToShow = () => {
-      // const { isLoggedIn } = authentication;
-
       if(authentication.isLoggedIn) {
          const { user } = authentication;
 
          return (
              <>
-               <Link to='/sign-up' className={styles.articleButton}>Create article</Link>
+               <Link
+                  className={styles.createArticleButton}
+                  to='/sign-up'>
+                  Create article
+               </Link>
                <Link to='/profile' className={styles.person}>
                   <div className={personInfo}>
-                     <div className={personName}>{user.username}</div>
+                     <div className={personName}>
+                        {user.username}
+                     </div>
                   </div>
                   <div className={personImage}>
                      <img src={user.image || src} alt="user's avatar" />
@@ -38,7 +42,9 @@ const Header = ({ authentication, logOut }) => {
                <button
                   type='button'
                   className={authButton}
-                  onClick={logOut}>Log Out</button>
+                  onClick={logOut}>
+                  Log Out
+               </button>
             </>
          )
       }
@@ -65,7 +71,9 @@ const Header = ({ authentication, logOut }) => {
       <header className={styles.header}>
          <div className={styles.container}>
             <div className={styles.content}>
-               <Link to='/articles' className={styles.logo}>Realworld blog</Link>
+               <Link
+                  to='/articles'
+                  className={styles.logo}>Realworld blog</Link>
                {getLinksToShow()}
             </div>
          </div>

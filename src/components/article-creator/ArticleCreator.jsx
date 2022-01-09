@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
-
+import TagItem from './tag-item';
 import styles from './ArticleCreator.module.scss';
 
 const ArticleCreator = () => {
-   const [ tags, setTags ] = useState(['']);
+   const [ tags, setTags ] = useState(['a', 'b', 'c']);
    const {
       register,
       handleSubmit,
@@ -12,19 +12,6 @@ const ArticleCreator = () => {
          errors
       },
    } = useForm();
-
-   const Tag = (index) => (
-      <div className={styles.tagContainer}>
-         <input
-            type='text'
-            placeholder='Tag'
-            className={styles.tagInput}
-            {...register(`tagList.${index}`)} />
-         <button
-            className={styles.deleteButton}
-            type='button'>Delete</button>
-      </div>
-   );
 
    const addTagInput = () => {
       setTags(() => {
@@ -36,7 +23,10 @@ const ArticleCreator = () => {
 
    const getTags = () => (
       tags.map((tag, index) => (
-         <Tag index={index} key={tag} />
+         <TagItem
+            index={index}
+            register={register}
+            key={tag} />
       ))
    );
 

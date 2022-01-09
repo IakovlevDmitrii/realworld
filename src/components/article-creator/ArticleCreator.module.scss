@@ -16,24 +16,9 @@
    flex-direction: column;
 }
 
-.tagContainer {
-   display: flex;
-   margin-bottom: 5px;
-
-   &:last-child {
-      margin-bottom: 0;
-   }
-}
-
 .buttonContainer {
    display: flex;
    align-items: flex-end;
-}
-
-.tagInput {
-   width: 100%;
-   max-width: 300px;
-   margin-right: 0.75rem;
 }
 
 %button {

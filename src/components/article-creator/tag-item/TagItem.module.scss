@@ -1,0 +1,14 @@
+.tagContainer {
+   display: flex;
+   margin-bottom: 5px;
+
+   &:last-child {
+      margin-bottom: 0;
+   }
+}
+
+.tagInput {
+   width: 100%;
+   max-width: 300px;
+   margin-right: 0.75rem;
+}
