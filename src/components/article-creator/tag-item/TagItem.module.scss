@@ -1,4 +1,6 @@
-.tagContainer {
+@import '../../app/styles/const.module';
+
+.container {
    display: flex;
    margin-bottom: 5px;
 
@@ -7,8 +9,21 @@
    }
 }
 
-.tagInput {
+.input {
    width: 100%;
    max-width: 300px;
    margin-right: 0.75rem;
+}
+
+.button {
+   width: 120px;
+   border: 1px solid $color__4;
+   border-radius: 4px;
+   font-size: 0.75rem;
+   color: $color__4;
+
+   &:hover,
+   &:active {
+      cursor: pointer;
+   }
 }

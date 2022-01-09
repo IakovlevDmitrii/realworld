@@ -21,30 +21,18 @@
    align-items: flex-end;
 }
 
-%button {
+.addButton {
+   width: 136px;
+   height: 2rem;
+   border: 1px solid $brand_primary__2;
    border-radius: 4px;
+   color: $brand_primary__2;
    font-size: 0.75rem;
-   border: 1px solid;
 
    &:hover,
    &:active {
       cursor: pointer;
    }
-}
-
-.deleteButton {
-   @extend %button;
-   width: 120px;
-   border-color: $color__4;
-   color: $color__4;
-}
-
-.addButton {
-   @extend %button;
-   width: 136px;
-   height: 2rem;
-   border-color: $brand_primary__2;
-   color: $brand_primary__2;
 
    @media only screen and ($screen-sm) {
       margin-left: 0.75rem;
