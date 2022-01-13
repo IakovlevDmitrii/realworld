@@ -11,11 +11,6 @@
    @extend %container_border;
 }
 
-//.containerNarrow {
-//   @extend %container_narrow;
-//   @extend %container_border;
-//}
-
 .content {
    @extend %content;
    padding: 2rem 1.5rem;
