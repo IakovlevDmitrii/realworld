@@ -9,18 +9,7 @@ import actionCreators from '../../../store/action-creators';
 
 import Spinner from "../../spinner";
 
-import styles from './SignIn.module.scss';
-
-const {
-   section,
-   containerNarrow,
-   content,
-   title,
-   error,
-   formButton,
-   authLink,
-   link,
-} = styles;
+import styles from '../styles/authComponents.module.scss';
 
 const SignIn = ({ updateUser }) => {
    const {
@@ -28,11 +17,9 @@ const SignIn = ({ updateUser }) => {
       handleSubmit,
       formState: {
          errors,
-         isValid,
-      },
-   } = useForm({
-      mode: 'onChange',
-   });
+         isValid
+      }
+   } = useForm({mode: 'onChange'});
 
    const [ isLoading, setIsLoading ] = useState(false);
    const [ hasErrors, setHasError ] = useState({});
@@ -51,9 +38,8 @@ const SignIn = ({ updateUser }) => {
          .login(email, password)
          .then((res) => {
             if(res.user) {updateUser(res.user)}
-            if(res.errors) {
-               setHasError(res.errors)
-            }
+            if(res.errors) {setHasError(res.errors)}
+
             setIsLoading(false);
          })
          .catch(err => { throw new Error(err.message) });
@@ -62,18 +48,18 @@ const SignIn = ({ updateUser }) => {
    if(isLoading) { return <Spinner /> }
 
    return (
-      <section className={section}>
-         <div className={containerNarrow}>
-            <div className={content}>
-               <div className={title}>
+      <section className={styles.section}>
+         <div className={styles.containerNarrow}>
+            <div className={styles.content}>
+               <div className={styles.title}>
                   <h3>Sign In</h3>
                </div>
                <form onSubmit={handleSubmit(onSubmit)}>
-                  <fieldset>
+                  <div className={styles.field}>
                      <label htmlFor='email'>Email address</label>
                      <input
                         className={
-                           (errors.email || hasErrors['email or password'] ) ? error : ''}
+                           (errors.email || hasErrors['email or password'] ) ? styles.error : ''}
                         placeholder="Email address"
                         type='email'
                         {...register("email", {
@@ -85,13 +71,17 @@ const SignIn = ({ updateUser }) => {
                         })}
                      />
                      {errors.email && <span>{errors.email.message}</span>}
-                     {hasErrors['email or password'] && <span>Email  or password {hasErrors['email or password'][0]}</span>}
-                  </fieldset>
-                  <fieldset>
+                     {hasErrors['email or password'] &&
+                        <span>
+                           Email  or password {hasErrors['email or password'][0]}
+                        </span>
+                     }
+                  </div>
+                  <div className={styles.field}>
                      <label htmlFor='password'>Password</label>
                      <input
                         className={
-                           (errors.password || hasErrors['email or password'] ) ? error : ''}
+                           (errors.password || hasErrors['email or password'] ) ? styles.error : ''}
                         placeholder="Password"
                         type='password'
                         {...register('password', {
@@ -99,16 +89,20 @@ const SignIn = ({ updateUser }) => {
                         })}
                      />
                      {errors.password && <span>{errors.password.message}</span>}
-                     {hasErrors['email or password'] && <span>Email  or password {hasErrors['email or password'][0]}</span>}
-                  </fieldset>
+                     {hasErrors['email or password'] &&
+                        <span>
+                           Email  or password {hasErrors['email or password'][0]}
+                        </span>
+                     }
+                  </div>
                   <button
                      disabled={!isValid}
-                     className={formButton}
+                     className={styles.formButton}
                      type='submit'>Login</button>
                </form>
-               <div className={authLink}>
+               <div className={styles.authLink}>
                   <div>Don’t have an account?</div>
-                  <div className={link}>
+                  <div className={styles.link}>
                      <Link to='/sign-up'>Sign Up.</Link>
                   </div>
                </div>

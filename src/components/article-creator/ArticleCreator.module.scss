@@ -1,6 +1,38 @@
 @import '../app/styles/const.module';
 @import '../app/styles/form.module';
 
+//.tagItem {
+//   display: flex;
+//   margin-bottom: 5px;
+//
+//   &:last-child {
+//      margin-bottom: 0;
+//   }
+//}
+//
+//.input {
+//   width: 100%;
+//   max-width: 300px;
+//   margin-right: 0.75rem;
+//}
+//
+//.deleteButton {
+//   width: 120px;
+//   border: 1px solid $color__4;
+//   border-radius: 4px;
+//   font-size: 0.75rem;
+//   color: $color__4;
+//
+//   &:hover,
+//   &:active {
+//      cursor: pointer;
+//   }
+//}
+
+
+
+
+
 .tags {
    display: grid;
    grid-template-columns: 1fr;
@@ -11,9 +43,37 @@
    }
 }
 
-.tagsContainer {
+.tagItemsContainer {
    display: flex;
    flex-direction: column;
+}
+
+.tagItem {
+   display: flex;
+   margin-bottom: 5px;
+
+   &:last-child {
+      margin-bottom: 0;
+   }
+}
+
+.tagInput {
+   width: 100%;
+   max-width: 300px;
+   margin-right: 0.75rem;
+}
+
+.deleteTagButton {
+   width: 120px;
+   border: 1px solid $color__4;
+   border-radius: 4px;
+   font-size: 0.75rem;
+   color: $color__4;
+
+   &:hover,
+   &:active {
+      cursor: pointer;
+   }
 }
 
 .buttonContainer {
@@ -21,7 +81,7 @@
    align-items: flex-end;
 }
 
-.addButton {
+.addTagButton {
    width: 136px;
    height: 2rem;
    border: 1px solid $brand_primary__2;

@@ -6,7 +6,7 @@ import realWorldApi from '../../../service';
 import actionCreators from '../../../store/action-creators';
 import Spinner from "../../spinner";
 
-import styles from './Profile.module.scss';
+import styles from '../styles/authComponents.module.scss';
 
 const {
    section,
@@ -17,7 +17,7 @@ const {
    formButton,
 } = styles;
 
-const Profile = ({ user, updateUser }) => {
+const EditProfile = ({ user, updateUser }) => {
    const { email, username, token } = user;
    const [ isLoading, setIsLoading ] = useState(false);
    const [ hasErrors, setHasError ] = useState({});
@@ -136,7 +136,7 @@ const Profile = ({ user, updateUser }) => {
    );
 };
 
-Profile.propTypes = {
+EditProfile.propTypes = {
    user: PropTypes.shape({
       email: PropTypes.string.isRequired,
       username: PropTypes.string.isRequired,
@@ -155,4 +155,4 @@ const mapDispatchToProps = {
 export default connect(
    mapStateToProps,
    mapDispatchToProps,
-)(Profile);
+)(EditProfile);

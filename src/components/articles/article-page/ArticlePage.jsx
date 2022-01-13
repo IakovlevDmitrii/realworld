@@ -6,7 +6,7 @@ import realWorldApiService from '../../../service';
 
 import Article from '../article';
 import Spinner from "../../spinner";
-import { ErrorIndicator } from "../../errors";
+import ErrorIndicator from "../../errors/error-indicator";
 
 import styles from './ArticlePage.module.scss';
 

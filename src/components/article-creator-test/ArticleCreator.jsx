@@ -1,30 +1,41 @@
-import React from 'react';
-import { useForm, useFieldArray } from "react-hook-form";
+// поле нового тега - статический инпут в интерфейсе.
+// а вот инпуты с уже существующими - динамические,
+// которые рендерятся по стейту
+
+import React, { useState } from 'react';
+import { useForm } from "react-hook-form";
+import TagItem from './tag-item';
 import styles from './ArticleCreator.module.scss';
 
 const ArticleCreator = () => {
-   const {
-      register,
-      control,
-      handleSubmit,
-      formState: {
-         errors
-      }
-   } = useForm({
-      defaultValues: {
-         tagList: ['']
-      }
-   });
+   const [ tagNames, setTagNames ] = useState(['']);
 
    const {
-      fields,
-      append,
-      remove
-   } = useFieldArray({
-      control,
-      name: 'tagList',
-      keyName: 'id',
-   });
+      register,
+      handleSubmit,
+      getValues,
+      formState: {
+         errors
+      },
+   } = useForm();
+
+   const tagItemsFromState = (
+      tagNames.map((tagName, index) => (
+         <TagItem
+            index={index}
+            register={register}
+            key={tagName} />
+      ))
+   );
+
+   const addTagItem = () => {
+      const tags = getValues('tagList');
+      tags.push('');
+      setTagNames([
+         ...getValues('tagList'),
+         ]
+      );
+   };
 
    const onSubmit = ({ title, description, body, tagList }) => {
       const article = { title, description, body, tagList };
@@ -40,6 +51,7 @@ const ArticleCreator = () => {
                   <h3>Create new article</h3>
                </div>
                <form onSubmit={handleSubmit(onSubmit)}>
+                  <fieldset>
                      <label htmlFor='title'>Title</label>
                      <input
                         className={errors.title ? styles.error : ''}
@@ -50,6 +62,7 @@ const ArticleCreator = () => {
                         })}
                      />
                      {errors.title && <span>{errors.title.message}</span>}
+                  </fieldset>
                   <fieldset>
                      <label htmlFor='description'>Short description</label>
                      <input
@@ -77,29 +90,13 @@ const ArticleCreator = () => {
                      <label htmlFor='tagList'>Tags</label>
                      <div className={styles.tags}>
                         <div className={styles.tagItemsContainer}>
-                           {fields.map((field, index) => (
-                              <div key={field.id} className={styles.tagItem}>
-                                 <input
-                                    type='text'
-                                    placeholder='Tag'
-                                    className={styles.tagInput}
-                                    {...register(`tagList.${index}.value`)} />
-                                 <button
-                                    className={styles.deleteTagButton}
-                                    onClick={() => remove(index)}
-                                    type='button'>
-                                    Delete
-                                 </button>
-                              </div>
-                           ))}
+                           {tagItemsFromState}
                         </div>
                         <div className={styles.buttonContainer}>
                            <button
-                              className={styles.addTagButton}
-                              type="button"
-                              onClick={() => {
-                                 append({ tagList: ''})}
-                              } >
+                              className={styles.button}
+                              onClick={addTagItem}
+                              type='button' >
                               Add tag
                            </button>
                         </div>
@@ -118,3 +115,8 @@ const ArticleCreator = () => {
 };
 
 export default ArticleCreator;
+
+//                            <TagItem
+//                               index={tagCounter}
+//                               register={register}
+//                               key={tagCounter} />

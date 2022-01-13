@@ -26,5 +26,3 @@ TagItem.propTypes = {
 };
 
 export default TagItem;
-
-//          {...register(`tagList.${index}`)}

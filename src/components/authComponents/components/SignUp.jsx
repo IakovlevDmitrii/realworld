@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+
 import realWorldApiService from '../../../service';
 import actionCreators from '../../../store/action-creators';
+
 import Spinner from "../../spinner";
 
-import styles from './SignUp.module.scss';
+import styles from '../styles/authComponents.module.scss';
 
 const {
    section,

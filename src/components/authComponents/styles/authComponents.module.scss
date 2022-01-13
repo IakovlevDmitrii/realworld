@@ -49,7 +49,7 @@
             border-color: #0b76ef;
             background: {
                color: #0b76ef;
-               image: url("images/checkbox-active.svg");
+               image: url("./images/checkbox-active.svg");
                size: cover;
             };
          }
@@ -73,4 +73,10 @@
          .custom-checkbox:disabled+label::before {background-color: #e9ecef;}
       }
    }
+}
+
+.field {
+   display: flex;
+   flex-direction: column;
+   padding: 0 0 0.75rem;
 }

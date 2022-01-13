@@ -3,7 +3,7 @@ import { Pagination } from 'antd';
 
 import Article from '../article';
 import Spinner from "../../spinner";
-import { ErrorIndicator } from "../../errors";
+import ErrorIndicator from "../../errors/error-indicator";
 
 import realWorldApiService from '../../../service';
 
