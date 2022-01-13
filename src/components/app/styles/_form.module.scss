@@ -85,7 +85,6 @@
 
 .formButton {
    width: 100%;
-   max-width: 320px;
    height: 2rem;
    font-size: 0.75rem;
    color: $brand_primary__1;
@@ -105,8 +104,7 @@
 }
 
 .authLink {
-   display: flex;
-   justify-content: center;
+   @extend %flex_center__full;
    padding-top: 8px;
    font-size: 0.7rem;
 }

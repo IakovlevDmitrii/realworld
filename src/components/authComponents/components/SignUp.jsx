@@ -35,15 +35,13 @@ const SignUp = ({ updateUser }) => {
       handleSubmit,
       getValues,
       formState: {
-         errors,
+         errors
       }
    } = useForm({
-      criteriaMode: "firstError",
+      criteriaMode: "firstError"
    });
 
-   const onSubmit = (data) => {
-      const { username, email, password } = data;
-
+   const onSubmit = ({ username, email, password }) => {
       setIsLoading(true);
 
       realWorldApiService
