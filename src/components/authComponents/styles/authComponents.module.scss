@@ -1,5 +1,9 @@
 @import '../../app/styles/form.module';
 
+.container {
+   max-width: 384px;
+}
+
 .content {
 
    input {
