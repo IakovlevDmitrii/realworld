@@ -69,13 +69,18 @@
    padding-bottom: 1rem;
 
    h3 {
+      text-align: center;
       font: {
          size: 1rem;
          weight: bold;
       }
-      text-align: center;
       color: $brand_primary__5;
    }
+}
+
+.field {
+   display: flex;
+   flex-direction: column;
 }
 
 .error:not(:focus) {

@@ -1,21 +1,6 @@
 @import '../../app/styles/form.module';
 
 .content {
-   fieldset {
-      &:nth-child(4) {
-         padding-bottom: 1rem;
-         border-bottom: 1px solid $color__2;
-      }
-      &:nth-child(5) {
-         display: flex;
-         align-items: flex-start;
-         padding: 0.5rem 0 1rem;
-         label {
-            line-height: 1rem;
-         }
-         input {height: 1rem;}
-      }
-   }
 
    input {
       &[type~="checkBox"] {
@@ -75,8 +60,12 @@
    }
 }
 
-.field {
-   display: flex;
-   flex-direction: column;
-   padding: 0 0 0.75rem;
+.agreement {
+   align-items: flex-start;
+   padding: 0.5rem 0 1rem;
+   border-top: 1px solid $color__2;
+
+   label {line-height: 1rem;}
+
+   input {height: 1rem;}
 }

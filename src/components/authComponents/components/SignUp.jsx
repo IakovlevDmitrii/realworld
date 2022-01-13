@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import classNames from 'classnames';
 
 import realWorldApiService from '../../../service';
 import actionCreators from '../../../store/action-creators';
@@ -10,17 +11,6 @@ import actionCreators from '../../../store/action-creators';
 import Spinner from "../../spinner";
 
 import styles from '../styles/authComponents.module.scss';
-
-const {
-   section,
-   containerNarrow,
-   content,
-   title,
-   error,
-   formButton,
-   authLink,
-   link,
-} = styles;
 
 const SignUp = ({ updateUser }) => {
    const [ isLoading, setIsLoading ] = useState(false);
@@ -50,10 +40,12 @@ const SignUp = ({ updateUser }) => {
          .then((res) => {
             if(res.user) {updateUser(res.user)}
             if(res.errors) {setHasError(res.errors)}
+
             setIsLoading(false);
          })
          .catch(err => {
             setIsLoading(false);
+
             throw new Error(err.message);
          });
    };
@@ -61,18 +53,18 @@ const SignUp = ({ updateUser }) => {
    if(isLoading) { return <Spinner /> }
 
    return (
-      <section className={section}>
-         <div className={containerNarrow}>
-            <div className={content}>
-               <div className={title}>
+      <section className={styles.section}>
+         <div className={styles.containerNarrow}>
+            <div className={styles.content}>
+               <div className={styles.title}>
                   <h3>Create new account</h3>
                </div>
                <form onSubmit={handleSubmit(onSubmit)}>
-                  <fieldset>
+                  <div className={styles.field}>
                      <label htmlFor='username'>Username</label>
                      <input
                         className={
-                           (errors.username || hasErrors.username) ? error : ''}
+                           (errors.username || hasErrors.username) ? styles.error : ''}
                         placeholder='Username'
                         type='text'
                         {...register('username', {
@@ -90,11 +82,11 @@ const SignUp = ({ updateUser }) => {
                      {errors.username && <span>{errors.username.message}</span>}
                      {hasErrors.username && (
                         <span>Username {hasErrors.username[0]}</span>)}
-                  </fieldset>
-                  <fieldset>
+                  </div>
+                  <div className={styles.field}>
                      <label htmlFor='email'>Email address</label>
                      <input
-                        className={( errors.email || hasErrors.email) ? error : ''}
+                        className={( errors.email || hasErrors.email) ? styles.error : ''}
                         placeholder='Email address'
                         type='email'
                         {...register("email", {
@@ -109,11 +101,11 @@ const SignUp = ({ updateUser }) => {
                      />
                      {errors.email && <span>{errors.email.message}</span>}
                      {hasErrors.email && <span>Email {hasErrors.email[0]}</span>}
-                  </fieldset>
-                  <fieldset>
+                  </div>
+                  <div className={styles.field}>
                      <label htmlFor='password'>Password</label>
                      <input
-                        className={errors.password ? error : ''}
+                        className={errors.password ? styles.error : ''}
                         placeholder='Password'
                         type='password'
                         {...register('password', {
@@ -129,11 +121,11 @@ const SignUp = ({ updateUser }) => {
                         })}
                      />
                      {errors.password && <span>{errors.password.message}</span>}
-                  </fieldset>
-                  <fieldset>
+                  </div>
+                  <div className={styles.field}>
                      <label htmlFor='passwordConfirmation'>Repeat Password</label>
                      <input
-                        className={errors.passwordConfirmation ? error : ''}
+                        className={errors.passwordConfirmation ? styles.error : ''}
                         placeholder='Password'
                         type='password'
                         {...register('passwordConfirmation', {
@@ -151,11 +143,11 @@ const SignUp = ({ updateUser }) => {
                            {errors.passwordConfirmation.message}
                         </span>
                      )}
-                  </fieldset>
-                  <fieldset>
+                  </div>
+                  <div className={classNames(styles.field, styles.agreement)}>
                      <input
                         id='agreement'
-                        className={errors.agreement ? error : ''}
+                        className={errors.agreement ? styles.error : ''}
                         type='checkBox'
                         {...register('agreement', {
                            required: 'Agreement is required',
@@ -165,14 +157,14 @@ const SignUp = ({ updateUser }) => {
                         I agree to the processing of my personal information
                      </label>
                      {errors.agreement && <span>{errors.agreement.message}</span>}
-                  </fieldset>
+                  </div>
                   <button
-                     className={formButton}
+                     className={styles.formButton}
                      type='submit'>Create</button>
                </form>
-               <div className={authLink}>
+               <div className={styles.authLink}>
                   <div>Already have an account?</div>
-                  <div className={link}>
+                  <div className={styles.link}>
                      <Link to='/sign-in'>Sign In.</Link>
                   </div>
                </div>
