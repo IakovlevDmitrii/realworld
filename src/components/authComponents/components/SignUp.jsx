@@ -54,7 +54,7 @@ const SignUp = ({ updateUser }) => {
 
    return (
       <section className={styles.section}>
-         <div className={styles.containerNarrow}>
+         <div className={styles.container}>
             <div className={styles.content}>
                <div className={styles.title}>
                   <h3>Create new account</h3>
