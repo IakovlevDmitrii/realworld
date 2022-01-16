@@ -4,6 +4,9 @@ import styles from './ArticleCreator.module.scss';
 
 const ArticleCreator = () => {
    const {
+      watch,
+
+
       register,
       control,
       handleSubmit,
@@ -12,18 +15,15 @@ const ArticleCreator = () => {
       }
    } = useForm({
       defaultValues: {
-         tagList: ['']
+         tagList: [
+            {value: ''},
+         ]
       }
    });
 
-   const {
-      fields,
-      append,
-      remove
-   } = useFieldArray({
-      control,
+   const { fields, remove, append } = useFieldArray({
       name: 'tagList',
-      keyName: 'id',
+      control,
    });
 
    const onSubmit = ({ title, description, body, tagList }) => {
@@ -31,6 +31,8 @@ const ArticleCreator = () => {
 
       console.log('article', article);
    };
+
+   console.log(watch("tagList"));
 
    return (
       <section className={styles.section}>
@@ -40,6 +42,7 @@ const ArticleCreator = () => {
                   <h3>Create new article</h3>
                </div>
                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className={styles.field}>
                      <label htmlFor='title'>Title</label>
                      <input
                         className={errors.title ? styles.error : ''}
@@ -50,7 +53,8 @@ const ArticleCreator = () => {
                         })}
                      />
                      {errors.title && <span>{errors.title.message}</span>}
-                  <fieldset>
+                  </div>
+                  <div className={styles.field}>
                      <label htmlFor='description'>Short description</label>
                      <input
                         className={errors.description ? styles.error : ''}
@@ -61,8 +65,8 @@ const ArticleCreator = () => {
                         })}
                      />
                      {errors.description && <span>{errors.description.message}</span>}
-                  </fieldset>
-                  <fieldset>
+                  </div>
+                  <div className={styles.field}>
                      <label htmlFor='body'>Text</label>
                      <textarea
                         className={errors.body ? styles.error : ''}
@@ -72,8 +76,8 @@ const ArticleCreator = () => {
                            required: 'Text is required',
                         })} />
                      {errors.body && <span>{errors.body.message}</span>}
-                  </fieldset>
-                  <fieldset>
+                  </div>
+                  <div className={styles.field}>
                      <label htmlFor='tagList'>Tags</label>
                      <div className={styles.tags}>
                         <div className={styles.tagItemsContainer}>
@@ -98,13 +102,13 @@ const ArticleCreator = () => {
                               className={styles.addTagButton}
                               type="button"
                               onClick={() => {
-                                 append({ tagList: ''})}
+                                 append({value: ''})}
                               } >
                               Add tag
                            </button>
                         </div>
                      </div>
-                  </fieldset>
+                  </div>
                   <button
                      className={styles.formButton}
                      type='submit'>
