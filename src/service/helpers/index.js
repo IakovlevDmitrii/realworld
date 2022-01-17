@@ -2,6 +2,7 @@ import getArticle from './get-article';
 import getArticles from './get-articles';
 import registerUser from './register-user';
 import loginUser from './login-user';
-import updateUser from './update-user';
+import editProfile from './edit-profile';
+import createArticle from './create-article';
 
-export { getArticle, getArticles, registerUser, loginUser, updateUser };
+export { getArticle, getArticles, createArticle, registerUser, loginUser, editProfile };

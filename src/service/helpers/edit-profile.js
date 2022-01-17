@@ -1,12 +1,12 @@
 import BASE_URL from './base-url';
 
 // Запрос на имзенение информации о пользователе
-const updateUser = async (token, userDetailsToUpdate) => {
+const editProfile = async (token, detailsToChange) => {
   const url = `${BASE_URL}/user`;
 
   const requestBody = {
     user: {
-      ...userDetailsToUpdate,
+      ...detailsToChange,
     },
   };
 
@@ -27,4 +27,4 @@ const updateUser = async (token, userDetailsToUpdate) => {
   }
 };
 
-export default updateUser;
+export default editProfile;

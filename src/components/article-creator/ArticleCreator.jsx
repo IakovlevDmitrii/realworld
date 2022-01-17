@@ -1,12 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { useForm, useFieldArray } from "react-hook-form";
+import PropTypes from 'prop-types';
+import RealWorldApiService from '../../service';
+
 import styles from './ArticleCreator.module.scss';
 
-const ArticleCreator = () => {
+const ArticleCreator = ({ token }) => {
    const {
-      watch,
-
-
       register,
       control,
       handleSubmit,
@@ -26,13 +27,32 @@ const ArticleCreator = () => {
       control,
    });
 
-   const onSubmit = ({ title, description, body, tagList }) => {
-      const article = { title, description, body, tagList };
+   const onSubmit = ({ tagList, ...rest }) => {
+      const articleData = {
+         article: {...rest}
+      };
 
-      console.log('article', article);
+      const tagsListToSend = [];
+
+      // Если есть теги, сохраним их в массив tagsListToSend
+      tagList.forEach(({ value }) => {
+         if(value) {
+            tagsListToSend.push(value)
+         }
+      });
+
+      if(tagsListToSend.length) {
+         articleData
+            .article
+            .tagList = tagsListToSend
+      }
+
+      console.log(articleData);
+
+      RealWorldApiService
+         .articles
+         .create(token, articleData)
    };
-
-   console.log(watch("tagList"));
 
    return (
       <section className={styles.section}>
@@ -121,4 +141,12 @@ const ArticleCreator = () => {
    )
 };
 
-export default ArticleCreator;
+ArticleCreator.propTypes = {
+   token: PropTypes.string.isRequired
+};
+
+const mapStateToProps = ({ authentication }) => ({
+   token: authentication.user.token
+});
+
+export default connect(mapStateToProps)(ArticleCreator);

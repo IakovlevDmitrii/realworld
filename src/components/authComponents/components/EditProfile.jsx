@@ -22,19 +22,19 @@ const EditProfile = ({ user, updateUser }) => {
    } = useForm();
 
    const onSubmit = (data) => {
-      const userDetailsToUpdate = {};
+      const detailsToChange = {};
 
-      // Если в data есть заполненные поля сохраним их в userDetailsToUpdate
+      // Если в data есть заполненные поля сохраним их в detailsToChange
       for (const key in data) {
          if(data[key]
             && Object.prototype.hasOwnProperty.call(data,key)){
-            userDetailsToUpdate[key] = data[key];
+            detailsToChange[key] = data[key];
          }
       }
 
       realWorldApi
          .authentication
-         .update(token, userDetailsToUpdate)
+         .edit(token, detailsToChange)
          .then((res) => {
             if(res.user) {updateUser(res.user)}
             if(res.errors) {setHasError(res.errors)}
