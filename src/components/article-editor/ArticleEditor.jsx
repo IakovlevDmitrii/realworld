@@ -1,58 +1,19 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { useForm, useFieldArray } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
-import RealWorldApiService from '../../service';
 
-import styles from './ArticleCreator.module.scss';
+import styles from "./ArticleEditor.module.scss";
 
-const ArticleCreator = ({ token }) => {
+const ArticleEditor = ({ onFormSubmit, defaultValues }) => {
+
    const {
-      register,
-      control,
-      handleSubmit,
-      formState: {
-         errors
-      }
-   } = useForm({
-      defaultValues: {
-         tagList: [
-            {value: ''},
-         ]
-      }
-   });
+      register, control, handleSubmit, formState: {errors}
+   } = useForm({ defaultValues });
 
    const { fields, remove, append } = useFieldArray({
       name: 'tagList',
       control,
    });
-
-   const onSubmit = ({ tagList, ...rest }) => {
-      const articleData = {
-         article: {...rest}
-      };
-
-      const tagsListToSend = [];
-
-      // Если есть теги, сохраним их в массив tagsListToSend
-      tagList.forEach(({ value }) => {
-         if(value) {
-            tagsListToSend.push(value)
-         }
-      });
-
-      if(tagsListToSend.length) {
-         articleData
-            .article
-            .tagList = tagsListToSend
-      }
-
-      console.log(articleData);
-
-      RealWorldApiService
-         .articles
-         .create(token, articleData)
-   };
 
    return (
       <section className={styles.section}>
@@ -61,7 +22,7 @@ const ArticleCreator = ({ token }) => {
                <div className={styles.title}>
                   <h3>Create new article</h3>
                </div>
-               <form onSubmit={handleSubmit(onSubmit)}>
+               <form onSubmit={handleSubmit(onFormSubmit)}>
                   <div className={styles.field}>
                      <label htmlFor='title'>Title</label>
                      <input
@@ -141,12 +102,27 @@ const ArticleCreator = ({ token }) => {
    )
 };
 
-ArticleCreator.propTypes = {
-   token: PropTypes.string.isRequired
+ArticleEditor.propTypes = {
+   onFormSubmit: PropTypes.func.isRequired,
+   defaultValues: PropTypes.shape({
+      title: PropTypes.string,
+      description: PropTypes.string,
+      body: PropTypes.string,
+      tagList: PropTypes.arrayOf(
+         PropTypes.shape({value: PropTypes.string})
+      )
+   })
 };
 
-const mapStateToProps = ({ authentication }) => ({
-   token: authentication.user.token
-});
+ArticleEditor.defaultProps = {
+   defaultValues: {
+      title: '',
+      description: '',
+      body: '',
+      tagList: [
+         {value: ''}
+      ]
+   }
+};
 
-export default connect(mapStateToProps)(ArticleCreator);
+export default ArticleEditor;

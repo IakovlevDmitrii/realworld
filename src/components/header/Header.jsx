@@ -26,7 +26,7 @@ const Header = ({ authentication, logOut }) => {
              <>
                <Link
                   className={styles.createArticleButton}
-                  to='/sign-up'>
+                  to='/new-article'>
                   Create article
                </Link>
                <Link to='/profile' className={styles.person}>

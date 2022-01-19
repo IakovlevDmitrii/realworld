@@ -1,0 +1,27 @@
+
+Routing Guidelines
+
+.On all pages
+    ..Header
+
+.Sign in page (URL:/sign-in)
+    ..Login form
+
+.Sign up page (URL:/sign-up)
+    ..Registration form
+
+.Edit profile page (URL:/profile)
+    ..Profile change form
+
+.List of articles page (URL:/ or URL:/articles)
+    ..List of articles
+    ..Pagination for list of articles
+
+.Article page (URL:/articles/article-slug-here)
+    ..Article page
+
+.Editor page to edit articles (URL:/articles/article-slug-here/edit)
+    ..Edit article form
+
+.Editor page to create articles (URL:/new-article)
+    ..Create article form

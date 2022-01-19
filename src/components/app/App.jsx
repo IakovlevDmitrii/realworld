@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // import components
 import ArticleList from '../articles/article-list';
 import ArticlePage from '../articles/article-page';
-import ArticleCreator from '../article-creator';
+import ArticleCreationPage from '../article-creation-page';
 import Header from '../header';
 import { SignIn, SignUp, EditProfile } from '../authComponents';
 
@@ -15,7 +15,6 @@ import styles from './styles/app.module.scss';
 const App = ({ isLoggedIn }) => (
    <div className={styles.content}>
       <Header />
-      <ArticleCreator />
       <Switch>
          <Route path='/articles/:slug' component={ArticlePage} />
          <Route path='/articles' component={ArticleList} />
@@ -28,6 +27,7 @@ const App = ({ isLoggedIn }) => (
          <Route path='/profile'>
             {isLoggedIn ? <EditProfile /> : <Redirect to="/articles" />}
          </Route>
+         <Route path='/new-article' component={ArticleCreationPage} />
          <Redirect from='/' to='/articles'/>
       </Switch>
    </div>
