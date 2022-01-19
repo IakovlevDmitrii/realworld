@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -12,21 +12,13 @@ import Spinner from "../../spinner";
 import styles from '../styles/authComponents.module.scss';
 
 const SignIn = ({ updateUser }) => {
+   const [ isLoading, setIsLoading ] = useState(false);
    const {
       register,
       handleSubmit,
-      formState: {
-         errors,
-         isValid
-      }
-   } = useForm({mode: 'onChange'});
-
-   const [ isLoading, setIsLoading ] = useState(false);
-   const [ hasErrors, setHasError ] = useState({});
-
-   useEffect(() => (
-      () => {setHasError({})}
-   ), []);
+      setError,
+      formState: { errors }
+   } = useForm();
 
    const onSubmit = (data) => {
       const { email, password } = data;
@@ -38,12 +30,31 @@ const SignIn = ({ updateUser }) => {
          .login(email, password)
          .then((res) => {
             if(res.user) {updateUser(res.user)}
-            if(res.errors) {setHasError(res.errors)}
+            if(res.errors) {
+               setError("email", {
+                  type: "manual",
+                  message: `Email or password ${res.errors['email or password'][0]}`,
+               });
+               setError("password", {
+                  type: "manual",
+                  message: `Email or password ${res.errors['email or password'][0]}`,
+               });
+            }
 
             setIsLoading(false);
          })
-         .catch(err => { throw new Error(err.message) });
+         .catch(err => {
+            setIsLoading(false);
+
+            throw new Error(err.message)
+         });
    };
+
+   const getSubInput = (inputName) => (
+      errors[inputName] && (
+         <span>{errors[inputName].message}</span>
+      )
+   );
 
    if(isLoading) { return <Spinner /> }
 
@@ -58,8 +69,7 @@ const SignIn = ({ updateUser }) => {
                   <div className={styles.field}>
                      <label htmlFor='email'>Email address</label>
                      <input
-                        className={
-                           (errors.email || hasErrors['email or password'] ) ? styles.error : ''}
+                        className={errors.email && styles.error}
                         placeholder="Email address"
                         type='email'
                         {...register("email", {
@@ -70,33 +80,21 @@ const SignIn = ({ updateUser }) => {
                            }
                         })}
                      />
-                     {errors.email && <span>{errors.email.message}</span>}
-                     {hasErrors['email or password'] &&
-                        <span>
-                           Email  or password {hasErrors['email or password'][0]}
-                        </span>
-                     }
+                     {getSubInput('email')}
                   </div>
                   <div className={styles.field}>
                      <label htmlFor='password'>Password</label>
                      <input
-                        className={
-                           (errors.password || hasErrors['email or password'] ) ? styles.error : ''}
+                        className={errors.password && styles.error}
                         placeholder="Password"
                         type='password'
                         {...register('password', {
                            required: 'Password is required',
                         })}
                      />
-                     {errors.password && <span>{errors.password.message}</span>}
-                     {hasErrors['email or password'] &&
-                        <span>
-                           Email  or password {hasErrors['email or password'][0]}
-                        </span>
-                     }
+                     {getSubInput('password')}
                   </div>
                   <button
-                     disabled={!isValid}
                      className={styles.formButton}
                      type='submit'>Login</button>
                </form>

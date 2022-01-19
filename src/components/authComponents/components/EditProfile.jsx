@@ -27,6 +27,9 @@ const EditProfile = ({ user, updateUser }) => {
          }
       }
 
+      console.log(detailsToChange);
+
+
       realWorldApi
          .authentication
          .edit(token, detailsToChange)
@@ -38,6 +41,7 @@ const EditProfile = ({ user, updateUser }) => {
          })
          .catch(err => {
             setIsLoading(false);
+
             throw new Error(err.message);
          });
    };
@@ -58,8 +62,8 @@ const EditProfile = ({ user, updateUser }) => {
                         className={errors.username ? styles.error : ''}
                         placeholder={username}
                         type='text'
-                        {...register('username', {
-                           // required: 'Username is required',
+                        {...register('username',{
+                           required: 'Username is required',
                         })}
                      />
                      {errors.username && <span>{errors.username?.message}</span>}
