@@ -10,16 +10,11 @@ import styles from '../styles/authComponents.module.scss';
 
 const EditProfile = ({ user, updateUser }) => {
    const { email, username, token } = user;
+
    const [ isLoading, setIsLoading ] = useState(false);
    const [ hasErrors, setHasError ] = useState({});
 
-   const {
-      register,
-      handleSubmit,
-      formState: {
-         errors
-      }
-   } = useForm();
+   const { register, handleSubmit, formState: { errors } } = useForm();
 
    const onSubmit = (data) => {
       const detailsToChange = {};

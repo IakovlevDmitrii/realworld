@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import RealWorldApiService from '../../service';
 import Spinner from "../spinner";
-import ErrorIndicator from "../errors/error-indicator";
 import ArticleEditor from '../article-editor';
 
 const ArticleCreationPage = ({ token }) => {
@@ -12,8 +11,8 @@ const ArticleCreationPage = ({ token }) => {
    // body: 'I like this',
    // tagList: [{value: 'a'}, {value: 'b'}]
 
-   const [ hasError, setHasError ] = useState(false);
    const [ isLoading, setIsLoading ] = useState(false);
+   const [ hasErrors, setHasErrors ] = useState({});
 
    const onSubmit = ({ tagList, ...rest }) => {
       setIsLoading(true);
@@ -37,27 +36,29 @@ const ArticleCreationPage = ({ token }) => {
             .tagList = tagsListToSend
       }
 
-
-      console.log(articleData);
-
       RealWorldApiService
          .articles
          .create(token, articleData)
-         .then( () => {
+         .then( (res) => {
+            //    if(res.article) {...}
+            if(res.errors) {setHasErrors(res.errors)}
+
             setIsLoading(false);
          })
-         .catch( () => {
-            setHasError(true);
+         .catch( (err) => {
             setIsLoading(false);
+
+            throw new Error(err.message);
          });
    };
 
    if(isLoading) { return <Spinner /> }
-   if(hasError) { return <ErrorIndicator /> }
 
    return (
       <ArticleEditor
+         title='Create new article'
          onFormSubmit={onSubmit}
+         hasErrors={hasErrors}
       />
    )
 };

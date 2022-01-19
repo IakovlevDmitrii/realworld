@@ -43,7 +43,7 @@ const SignUp = ({ updateUser }) => {
 
             setIsLoading(false);
          })
-         .catch(err => {
+         .catch((err) => {
             setIsLoading(false);
 
             throw new Error(err.message);

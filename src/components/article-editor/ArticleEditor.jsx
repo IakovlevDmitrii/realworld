@@ -1,10 +1,11 @@
 import React from 'react';
 import { useFieldArray, useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import styles from "./ArticleEditor.module.scss";
 
-const ArticleEditor = ({ onFormSubmit, defaultValues }) => {
+const ArticleEditor = ({ title, onFormSubmit, defaultValues, hasErrors }) => {
 
    const {
       register, control, handleSubmit, formState: {errors}
@@ -15,48 +16,71 @@ const ArticleEditor = ({ onFormSubmit, defaultValues }) => {
       control,
    });
 
+   const getClassNames = (inputName) => (
+      classNames({
+         [styles.error]: errors[inputName] || hasErrors[inputName]
+      })
+   );
+
    return (
       <section className={styles.section}>
          <div className={styles.container}>
             <div className={styles.content}>
                <div className={styles.title}>
-                  <h3>Create new article</h3>
+                  <h3>{title}</h3>
                </div>
                <form onSubmit={handleSubmit(onFormSubmit)}>
                   <div className={styles.field}>
                      <label htmlFor='title'>Title</label>
                      <input
-                        className={errors.title ? styles.error : ''}
+                        className={getClassNames('title')}
                         placeholder='Title'
                         type='text'
-                        {...register('title', {
-                           required: 'Title is required',
-                        })}
+                        {...register(
+                           'title',
+                           {required: 'Title is required'}
+                        )}
                      />
-                     {errors.title && <span>{errors.title.message}</span>}
+                     {errors.title && (
+                        <span>{errors.title.message}</span>
+                     )}
+                     {hasErrors.title && (
+                        <span>Title {hasErrors.title[0]}</span>
+                     )}
                   </div>
                   <div className={styles.field}>
                      <label htmlFor='description'>Short description</label>
                      <input
-                        className={errors.description ? styles.error : ''}
-                        placeholder='Title'
+                        className={getClassNames('description')}
                         type='text'
-                        {...register('description', {
-                           required: 'Description is required',
-                        })}
+                        {...register(
+                           'description',
+                           {required: 'Description is required'}
+                        )}
                      />
-                     {errors.description && <span>{errors.description.message}</span>}
+                     {errors.description && (
+                        <span>{errors.description.message}</span>
+                     )}
+                     {hasErrors.description && (
+                        <span>Description {hasErrors.description[0]}</span>
+                     )}
                   </div>
                   <div className={styles.field}>
                      <label htmlFor='body'>Text</label>
                      <textarea
-                        className={errors.body ? styles.error : ''}
+                        className={getClassNames('body')}
                         rows={7}
                         placeholder='Text'
-                        {...register('body', {
-                           required: 'Text is required',
-                        })} />
-                     {errors.body && <span>{errors.body.message}</span>}
+                        {...register(
+                           'body',
+                           {required: 'Text is required'}
+                        )} />
+                     {errors.body && (
+                        <span>{errors.body.message}</span>
+                     )}
+                     {hasErrors.body && (
+                        <span>Description {hasErrors.body[0]}</span>
+                     )}
                   </div>
                   <div className={styles.field}>
                      <label htmlFor='tagList'>Tags</label>
@@ -103,9 +127,18 @@ const ArticleEditor = ({ onFormSubmit, defaultValues }) => {
 };
 
 ArticleEditor.propTypes = {
+   title: PropTypes.string.isRequired,
    onFormSubmit: PropTypes.func.isRequired,
    defaultValues: PropTypes.shape({
       title: PropTypes.string,
+      description: PropTypes.string,
+      body: PropTypes.string,
+      tagList: PropTypes.arrayOf(
+         PropTypes.shape({value: PropTypes.string})
+      )
+   }),
+   hasErrors: PropTypes.shape({
+      title: PropTypes.arrayOf(PropTypes.string),
       description: PropTypes.string,
       body: PropTypes.string,
       tagList: PropTypes.arrayOf(
@@ -122,7 +155,15 @@ ArticleEditor.defaultProps = {
       tagList: [
          {value: ''}
       ]
-   }
+   },
+   hasErrors: {
+      title: [''],
+      description: '',
+      body: '',
+      tagList: [
+         {value: ''}
+      ]
+   },
 };
 
 export default ArticleEditor;
