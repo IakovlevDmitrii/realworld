@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import classNames from 'classnames';
 import styles from "../styles/authComponents.module.scss";
 
 const FormField = ( {
@@ -11,6 +12,7 @@ const FormField = ( {
    validationRules,
    errors,
    labelBehind,
+   extraClassName,
 } ) => {
    const getSubInput = (inputName) => (
       errors[inputName] && (
@@ -43,7 +45,7 @@ const FormField = ( {
    );
 
    return (
-      <div className={styles.field}>
+      <div className={classNames(styles.field, extraClassName)}>
          {elementsToShow()}
          {getSubInput(name)}
       </div>
@@ -59,10 +61,12 @@ FormField.propTypes = {
    validationRules: PropTypes.shape({ }).isRequired,
    errors: PropTypes.shape({ }).isRequired,
    labelBehind: PropTypes.bool,
+   extraClassName: PropTypes.string,
 };
 
 FormField.defaultProps = {
    labelBehind: false,
+   extraClassName: '',
 };
 
 export default FormField;
