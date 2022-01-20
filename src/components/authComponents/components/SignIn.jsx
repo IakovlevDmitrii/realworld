@@ -8,21 +8,17 @@ import realWorldApiService from '../../../service';
 import actionCreators from '../../../store/action-creators';
 
 import Spinner from "../../spinner";
+import FormField from './FormField';
+import formsConfig from './formsConfig';
 
 import styles from '../styles/authComponents.module.scss';
 
 const SignIn = ({ updateUser }) => {
    const [ isLoading, setIsLoading ] = useState(false);
-   const {
-      register,
-      handleSubmit,
-      setError,
-      formState: { errors }
-   } = useForm();
+   const { register, handleSubmit, setError, formState: {errors} } = useForm();
 
    const onSubmit = (data) => {
       const { email, password } = data;
-
       setIsLoading(true);
 
       realWorldApiService
@@ -40,21 +36,23 @@ const SignIn = ({ updateUser }) => {
                   message: `Email or password ${res.errors['email or password'][0]}`,
                });
             }
-
-            setIsLoading(false);
          })
          .catch(err => {
-            setIsLoading(false);
-
             throw new Error(err.message)
-         });
+         })
+         .finally(() => {
+            setIsLoading(false);
+         })
    };
 
-   const getSubInput = (inputName) => (
-      errors[inputName] && (
-         <span>{errors[inputName].message}</span>
-      )
-   );
+   const formFields = (formsConfig.singIn).map((field) => (
+      <FormField
+         {...field}
+         register={register}
+         errors={errors}
+         key={field.name}
+      />
+   ));
 
    if(isLoading) { return <Spinner /> }
 
@@ -66,34 +64,7 @@ const SignIn = ({ updateUser }) => {
                   <h3>Sign In</h3>
                </div>
                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className={styles.field}>
-                     <label htmlFor='email'>Email address</label>
-                     <input
-                        className={errors.email && styles.error}
-                        placeholder="Email address"
-                        type='email'
-                        {...register("email", {
-                           required: 'Email is required',
-                           pattern: {
-                              value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                              message: "Invalid email address"
-                           }
-                        })}
-                     />
-                     {getSubInput('email')}
-                  </div>
-                  <div className={styles.field}>
-                     <label htmlFor='password'>Password</label>
-                     <input
-                        className={errors.password && styles.error}
-                        placeholder="Password"
-                        type='password'
-                        {...register('password', {
-                           required: 'Password is required',
-                        })}
-                     />
-                     {getSubInput('password')}
-                  </div>
+                  {formFields}
                   <button
                      className={styles.formButton}
                      type='submit'>Login</button>
