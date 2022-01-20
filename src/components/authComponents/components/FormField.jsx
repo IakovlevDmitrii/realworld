@@ -13,6 +13,7 @@ const FormField = ( {
    errors,
    labelBehind,
    extraClassName,
+   id,
 } ) => {
    const getSubInput = (inputName) => (
       errors[inputName] && (
@@ -27,6 +28,7 @@ const FormField = ( {
          placeholder={placeholder}
          type={type}
          {...register(name, {...validationRules})}
+         id={id}
       />,
    };
 
@@ -62,11 +64,13 @@ FormField.propTypes = {
    errors: PropTypes.shape({ }).isRequired,
    labelBehind: PropTypes.bool,
    extraClassName: PropTypes.string,
+   id: PropTypes.string,
 };
 
 FormField.defaultProps = {
    labelBehind: false,
    extraClassName: '',
+   id: null,
 };
 
 export default FormField;
