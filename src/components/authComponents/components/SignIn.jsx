@@ -25,7 +25,9 @@ const SignIn = ({ updateUser }) => {
          .authentication
          .login(email, password)
          .then((res) => {
-            if(res.user) {updateUser(res.user)}
+            if(res.user) {
+               updateUser(res.user)
+            }
             if(res.errors) {
                setError("email", {
                   type: "manual",
@@ -45,12 +47,27 @@ const SignIn = ({ updateUser }) => {
          })
    };
 
-   const formFields = (formsConfig.singIn).map((field) => (
+   const validationRules = {
+      email: {
+         required: 'Email is required',
+         pattern: {
+            value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+            message: 'Invalid email address',
+         },
+      },
+
+      password: {
+         required: 'Password is required',
+      }
+   };
+
+   const formFields = (formsConfig.singIn).map((fieldDetails) => (
       <FormField
-         {...field}
+         {...fieldDetails}
          register={register}
+         validationRules={validationRules[fieldDetails.name]}
          errors={errors}
-         key={field.name}
+         key={fieldDetails.name}
       />
    ));
 
