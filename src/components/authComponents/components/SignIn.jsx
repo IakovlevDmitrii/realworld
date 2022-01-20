@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -16,6 +16,10 @@ import styles from '../styles/authComponents.module.scss';
 const SignIn = ({ updateUser }) => {
    const [ isLoading, setIsLoading ] = useState(false);
    const { register, handleSubmit, setError, formState: {errors} } = useForm({});
+
+   useEffect(() => (
+      () => {setIsLoading(false)}
+   ), []);
 
    const onSubmit = (data) => {
       const { email, password } = data;
@@ -38,6 +42,8 @@ const SignIn = ({ updateUser }) => {
                   message: `Email or password ${res.errors['email or password'][0]}`,
                });
             }
+            setIsLoading(false);
+
          })
          .catch(err => {
             throw new Error(err.message)
