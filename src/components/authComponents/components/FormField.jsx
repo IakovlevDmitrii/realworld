@@ -57,7 +57,7 @@ const FormField = ( {
 FormField.propTypes = {
    label: PropTypes.string.isRequired,
    name: PropTypes.string.isRequired,
-   placeholder: PropTypes.string.isRequired,
+   placeholder: PropTypes.string,
    type: PropTypes.string.isRequired,
    register: PropTypes.func.isRequired,
    validationRules: PropTypes.shape({ }).isRequired,
@@ -68,6 +68,7 @@ FormField.propTypes = {
 };
 
 FormField.defaultProps = {
+   placeholder: null,
    labelBehind: false,
    extraClassName: '',
    id: null,

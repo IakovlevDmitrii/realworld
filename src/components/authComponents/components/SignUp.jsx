@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import classNames from 'classnames';
+// import classNames from 'classnames';
 
 import realWorldApiService from '../../../service';
 import actionCreators from '../../../store/action-creators';
@@ -101,6 +101,10 @@ const SignUp = ({ updateUser }) => {
             }
          },
       },
+
+      agreement: {
+         required: 'Agreement is required',
+      },
    };
 
    if(isLoading) {
@@ -143,20 +147,14 @@ const SignUp = ({ updateUser }) => {
                      errors={errors}
                   />
 
-                  <div className={classNames(styles.field, styles.agreement)}>
-                     <input
-                        id='agreement'
-                        className={errors.agreement ? styles.error : ''}
-                        type='checkBox'
-                        {...register('agreement', {
-                           required: 'Agreement is required',
-                        })}
-                     />
-                     <label htmlFor='agreement'>
-                        I agree to the processing of my personal information
-                     </label>
-                     {errors.agreement && <span>{errors.agreement.message}</span>}
-                  </div>
+                  <FormField
+                     {...formsConfig.singUp[4]}
+                     register={register}
+                     validationRules={validationRules.agreement}
+                     errors={errors}
+                     extraClassName={styles.agreement}
+                  />
+
                   <button
                      className={styles.formButton}
                      type='submit'
@@ -277,6 +275,21 @@ export default connect(
 //                            {errors.passwordConfirmation.message}
 //                         </span>
 //                      )}
+//                   </div>
+
+//                   <div className={classNames(styles.field, styles.agreement)}>
+//                      <input
+//                         id='agreement'
+//                         className={errors.agreement ? styles.error : ''}
+//                         type='checkBox'
+//                         {...register('agreement', {
+//                            required: 'Agreement is required',
+//                         })}
+//                      />
+//                      <label htmlFor='agreement'>
+//                         I agree to the processing of my personal information
+//                      </label>
+//                      {errors.agreement && <span>{errors.agreement.message}</span>}
 //                   </div>
 
 

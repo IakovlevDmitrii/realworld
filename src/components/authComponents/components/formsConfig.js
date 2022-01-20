@@ -43,6 +43,14 @@ const formConfig = {
       placeholder: 'Password',
       type: 'password',
     },
+
+    {
+      name: 'agreement',
+      label: 'I agree to the processing of my personal information',
+      type: 'checkBox',
+      labelBehind: true,
+      id: 'agreement',
+    },
   ],
 };
 
