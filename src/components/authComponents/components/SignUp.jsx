@@ -15,7 +15,7 @@ import styles from '../styles/authComponents.module.scss';
 
 const SignUp = ({ updateUser }) => {
    const [ isLoading, setIsLoading ] = useState(false);
-   const {register, handleSubmit, getValues, setError, formState: {errors}} = useForm({});
+   const {register, handleSubmit, getValues, formState: {errors}, setError} = useForm({});
 
    const onSubmit = ({ username, email, password }) => {
       setIsLoading(true);
