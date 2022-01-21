@@ -15,35 +15,36 @@ import styles from '../styles/authComponents.module.scss';
 
 const SignIn = ({ updateUser }) => {
    const [ isLoading, setIsLoading ] = useState(false);
-   const { register, handleSubmit, setError, formState: {errors} } = useForm({});
+   const { register, handleSubmit, formState: {errors}, setError } = useForm({});
 
    useEffect(() => (
       () => {setIsLoading(false)}
    ), []);
 
-   const onSubmit = (data) => {
-      const { email, password } = data;
+   const onSubmit = ({ email, password }) => {
       setIsLoading(true);
 
       realWorldApiService
          .authentication
          .login(email, password)
          .then((res) => {
-            if(res.user) {
-               updateUser(res.user)
+            const userDetails = res.user;
+            const serverErrors = res.errors;
+
+            if(userDetails) {
+               updateUser(userDetails)
             }
-            if(res.errors) {
+
+            if(serverErrors) {
                setError('email', {
                   type: "manual",
-                  message: `Email or password ${res.errors['email or password']}`,
+                  message: `Email or password ${serverErrors['email or password']}`,
                });
                setError("password", {
                   type: "manual",
-                  message: `Email or password ${res.errors['email or password']}`,
+                  message: `Email or password ${serverErrors['email or password']}`,
                });
             }
-            setIsLoading(false);
-
          })
          .catch(err => {
             throw new Error(err.message)
