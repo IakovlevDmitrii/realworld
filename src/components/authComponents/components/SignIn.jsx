@@ -9,8 +9,9 @@ import actionCreators from '../../../store/action-creators';
 
 import Spinner from "../../spinner";
 import FormField from './FormField';
-import formsConfig from '../utils/formsConfig';
 
+import formsConfig from '../utils/formsConfig';
+import rules from '../utils/rules';
 import styles from '../styles/authComponents.module.scss';
 
 const SignIn = ({ updateUser }) => {
@@ -56,15 +57,12 @@ const SignIn = ({ updateUser }) => {
 
    const validationRules = {
       email: {
-         required: 'Email is required',
-         pattern: {
-            value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-            message: 'Invalid email address',
-         },
+         ...rules.required('Email'),
+         ...rules.email(),
       },
 
       password: {
-         required: 'Password is required',
+         ...rules.required('Password'),
       }
    };
 
