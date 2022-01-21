@@ -39,6 +39,14 @@ const match = (values) => ({
   },
 });
 
+const avatar = () => ({
+  pattern: {
+    // value: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
+    value: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+$/,
+    message: 'Invalid url address',
+  },
+});
+
 const rules = {
   required,
   minLength,
@@ -46,6 +54,7 @@ const rules = {
   minMaxLength,
   email,
   match,
+  avatar,
 };
 
 export default rules;

@@ -8,8 +8,9 @@ import actionCreators from '../../../store/action-creators';
 
 import Spinner from "../../spinner";
 import FormField from './FormField';
-import formsConfig from '../utils/formsConfig';
 
+import formsConfig from '../utils/formsConfig';
+import rules from '../utils/rules';
 import styles from '../styles/authComponents.module.scss';
 
 const EditProfile = ({ user, updateUser }) => {
@@ -63,34 +64,20 @@ const EditProfile = ({ user, updateUser }) => {
 
    const validationRules = {
       username: {
-         required: 'Username is required',
+         ...rules.required('Username'),
       },
 
       email: {
-         required: 'Email is required',
-         pattern: {
-            value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-            message: "Invalid email address"
-         }
+         ...rules.required('Email'),
+         ...rules.email(),
       },
 
       password: {
-         minLength: {
-            value: 6,
-            message: 'Password must be at least 6 characters'
-         },
-         maxLength: {
-            value: 40,
-            message: 'Password must not exceed 40 characters'
-         },
+         ...rules.minMaxLength('Password', 6, 40),
       },
 
       avatar: {
-         pattern: {
-            // value: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
-            value: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+$/,
-            message: "Invalid url address"
-         }
+         ...rules.avatar(),
       }
    };
 
