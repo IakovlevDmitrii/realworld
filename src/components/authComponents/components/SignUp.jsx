@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -16,6 +16,10 @@ import styles from '../styles/authComponents.module.scss';
 const SignUp = ({ updateUser }) => {
    const [ isLoading, setIsLoading ] = useState(false);
    const {register, handleSubmit, getValues, formState: {errors}, setError} = useForm({});
+
+   useEffect(() => (
+      () => {setIsLoading(false)}
+   ), []);
 
    const onSubmit = ({ username, email, password }) => {
       setIsLoading(true);
