@@ -35,11 +35,11 @@ const SignIn = ({ updateUser }) => {
             if(res.errors) {
                setError("email", {
                   type: "manual",
-                  message: `Email or password ${res.errors['email or password'][0]}`,
+                  message: `Email or password ${res.errors['email or password']}`,
                });
                setError("password", {
                   type: "manual",
-                  message: `Email or password ${res.errors['email or password'][0]}`,
+                  message: `Email or password ${res.errors['email or password']}`,
                });
             }
             setIsLoading(false);
