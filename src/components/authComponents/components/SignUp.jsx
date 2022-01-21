@@ -15,16 +15,7 @@ import styles from '../styles/authComponents.module.scss';
 
 const SignUp = ({ updateUser }) => {
    const [ isLoading, setIsLoading ] = useState(false);
-
-   const {
-      register,
-      handleSubmit,
-      getValues,
-      setError,
-      formState: {
-         errors
-      }
-   } = useForm({});
+   const {register, handleSubmit, getValues, setError, formState: {errors}} = useForm({});
 
    const onSubmit = ({ username, email, password }) => {
       setIsLoading(true);
@@ -33,16 +24,19 @@ const SignUp = ({ updateUser }) => {
          .authentication
          .register(username, email, password)
          .then((res) => {
-            if(res.user) {
-               updateUser(res.user)
+            const userDetails = res.user;
+            const serverErrors = res.errors;
+
+            if(userDetails) {
+               updateUser(userDetails)
             }
 
-            if(res.errors) {
-               for(const error in res.errors) {
-                  if(Object.prototype.hasOwnProperty.call(res.errors, error)){
+            if(serverErrors) {
+               for(const error in serverErrors) {
+                  if(Object.prototype.hasOwnProperty.call(serverErrors, error)){
                      setError(error, {
                         type: "manual",
-                        message: `${error} ${res.errors[error][0]}`,
+                        message: `${error} ${serverErrors[error][0]}`,
                      });
                   }
                }
@@ -107,26 +101,20 @@ const SignUp = ({ updateUser }) => {
    };
 
    const formFields = (formsConfig.singUp).map((fieldDetails) => {
-      if(fieldDetails.name === 'agreement') {
-         return (
-            <FormField
-               {...fieldDetails}
-               register={register}
-               validationRules={validationRules[fieldDetails.name]}
-               errors={errors}
-               extraClassName={styles.agreement}
-               key={fieldDetails.name}
-            />
-         )
+      const { name } = fieldDetails;
+      const addedFieldDetails = fieldDetails;
+
+      if(name === 'agreement') {
+         addedFieldDetails.extraClassName = styles.agreement
       }
 
       return (
          <FormField
-            {...fieldDetails}
+            {...addedFieldDetails}
             register={register}
-            validationRules={validationRules[fieldDetails.name]}
+            validationRules={validationRules[name]}
             errors={errors}
-            key={fieldDetails.name}
+            key={name}
          />
       )
    });

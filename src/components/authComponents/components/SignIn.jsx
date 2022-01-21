@@ -33,7 +33,7 @@ const SignIn = ({ updateUser }) => {
                updateUser(res.user)
             }
             if(res.errors) {
-               setError("email", {
+               setError('email', {
                   type: "manual",
                   message: `Email or password ${res.errors['email or password']}`,
                });

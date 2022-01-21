@@ -52,6 +52,36 @@ const formConfig = {
       id: 'agreement',
     },
   ],
+
+  editProfile: [
+    {
+      name: 'username',
+      label: 'Username',
+      placeholder: null,
+      type: 'text',
+    },
+
+    {
+      name: 'email',
+      label: 'Email address',
+      placeholder: null,
+      type: 'email',
+    },
+
+    {
+      name: 'password',
+      label: 'New password',
+      placeholder: 'New password',
+      type: 'password',
+    },
+
+    {
+      name: 'avatar',
+      label: 'Avatar image (url)',
+      placeholder: 'Avatar image',
+      type: 'url',
+    },
+  ],
 };
 
 export default formConfig;

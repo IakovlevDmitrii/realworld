@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { connect } from "react-redux";
 import { useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
+
 import realWorldApi from '../../../service';
 import actionCreators from '../../../store/action-creators';
+
 import Spinner from "../../spinner";
+import FormField from './FormField';
+import formsConfig from './formsConfig';
 
 import styles from '../styles/authComponents.module.scss';
 
@@ -12,9 +16,8 @@ const EditProfile = ({ user, updateUser }) => {
    const { email, username, token } = user;
 
    const [ isLoading, setIsLoading ] = useState(false);
-   const [ hasErrors, setHasError ] = useState({});
 
-   const { register, handleSubmit, formState: { errors } } = useForm();
+   const { register, handleSubmit, formState: { errors }, setError } = useForm();
 
    const onSubmit = (data) => {
       const detailsToChange = {};
@@ -27,23 +30,64 @@ const EditProfile = ({ user, updateUser }) => {
          }
       }
 
-      console.log(detailsToChange);
-
-
       realWorldApi
          .authentication
          .edit(token, detailsToChange)
          .then((res) => {
-            if(res.user) {updateUser(res.user)}
-            if(res.errors) {setHasError(res.errors)}
+            if(res.user) {
+               updateUser(res.user)
+            }
 
-            setIsLoading(false);
+            if(res.errors) {
+               for(const error in res.errors) {
+                  if(Object.prototype.hasOwnProperty.call(res.errors, error)){
+                     setError(error, {
+                        type: "manual",
+                        message: `${error} ${res.errors[error][0]}`,
+                     });
+                  }
+               }
+            }
          })
          .catch(err => {
-            setIsLoading(false);
-
             throw new Error(err.message);
-         });
+         })
+         .finally(() => {
+            setIsLoading(false);
+         })
+   };
+
+   const validationRules = {
+      username: {
+         required: 'Username is required',
+      },
+
+      email: {
+         required: 'Email is required',
+         pattern: {
+            value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+            message: "Invalid email address"
+         }
+      },
+
+      password: {
+         minLength: {
+            value: 6,
+            message: 'Password must be at least 6 characters'
+         },
+         maxLength: {
+            value: 40,
+            message: 'Password must not exceed 40 characters'
+         },
+      },
+
+      avatar: {
+         pattern: {
+            // value: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
+            value: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+$/,
+            message: "Invalid url address"
+         }
+      }
    };
 
    if(isLoading) { return <Spinner /> }
@@ -56,71 +100,37 @@ const EditProfile = ({ user, updateUser }) => {
                   <h3>Edit Profile</h3>
                </div>
                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className={styles.field}>
-                     <label htmlFor='username'>Username</label>
-                     <input
-                        className={errors.username ? styles.error : ''}
-                        placeholder={username}
-                        type='text'
-                        {...register('username',{
-                           required: 'Username is required',
-                        })}
-                     />
-                     {errors.username && <span>{errors.username?.message}</span>}
-                     {hasErrors.username && (
-                        <span>Username {hasErrors.username[0]}</span>)}
-                  </div>
-                  <div className={styles.field}>
-                     <label htmlFor='email'>Email address</label>
-                     <input
-                        className={errors.email ? styles.error : ''}
-                        placeholder={email}
-                        type='email'
-                        {...register("email", {
-                           pattern: {
-                              value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                              message: "Invalid email address"
-                           }
-                        })}
-                     />
-                     {errors.email && <span>{errors.email.message}</span>}
-                     {hasErrors.email && <span>Email {hasErrors.email[0]}</span>}
-                  </div>
-                  <div className={styles.field}>
-                     <label htmlFor='password'>New password</label>
-                     <input
-                        className={errors.password ? styles.error : ''}
-                        placeholder='New password'
-                        type='password'
-                        {...register('password', {
-                           minLength: {
-                              value: 6,
-                              message: 'Password must be at least 6 characters'
-                           },
-                           maxLength: {
-                              value: 40,
-                              message: 'Password must not exceed 40 characters'
-                           },
-                        })}
-                     />
-                     {errors.password && <span>{errors.password.message}</span>}
-                  </div>
-                  <div className={styles.field}>
-                     <label htmlFor='avatar'>Avatar image (url)</label>
-                     <input
-                        className={errors.avatar ? styles.error : ''}
-                        placeholder='Avatar image'
-                        type='url'
-                        {...register("avatar", {
-                           pattern: {
-                              // value: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
-                              value: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+$/,
-                              message: "Invalid url address"
-                           }
-                        })}
-                     />
-                     {errors.avatar && <span>{errors.avatar.message}</span>}
-                  </div>
+
+                  <FormField
+                     {...formsConfig.editProfile[0]}
+                     placeholder={username}
+                     register={register}
+                     validationRules={validationRules.username}
+                     errors={errors}
+                  />
+
+                  <FormField
+                     {...formsConfig.editProfile[1]}
+                     placeholder={email}
+                     register={register}
+                     validationRules={validationRules.email}
+                     errors={errors}
+                  />
+
+                  <FormField
+                     {...formsConfig.editProfile[2]}
+                     register={register}
+                     validationRules={validationRules.password}
+                     errors={errors}
+                  />
+
+                  <FormField
+                     {...formsConfig.editProfile[3]}
+                     register={register}
+                     validationRules={validationRules.avatar}
+                     errors={errors}
+                  />
+
                   <button
                      className={styles.formButton}
                      type='submit'>
@@ -153,3 +163,75 @@ export default connect(
    mapStateToProps,
    mapDispatchToProps
 )(EditProfile);
+
+//                   <div className={styles.field}>
+//                      <label htmlFor='username'>Username</label>
+//                      <input
+//                         className={errors.username ? styles.error : ''}
+//                         placeholder={username}
+//                         type='text'
+//                         {...register('username',{
+//                            required: 'Username is required',
+//                         })}
+//                      />
+//                      {errors.username && <span>{errors.username?.message}</span>}
+//                      {hasErrors.username && (
+//                         <span>Username {hasErrors.username[0]}</span>)}
+//                   </div>
+
+//                   <div className={styles.field}>
+//                      <label htmlFor='email'>Email address</label>
+//                      <input
+//                         className={errors.email ? styles.error : ''}
+//                         placeholder={email}
+//                         type='email'
+//                         {...register("email", {
+//                            required: 'Email is required',
+//                            pattern: {
+//                               value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+//                               message: "Invalid email address"
+//                            }
+//                         })}
+//                      />
+//                      {errors.email && <span>{errors.email.message}</span>}
+//                      {hasErrors.email && <span>Email {hasErrors.email[0]}</span>}
+//                   </div>
+
+
+//                   <div className={styles.field}>
+//                      <label htmlFor='password'>New password</label>
+//                      <input
+//                         className={errors.password ? styles.error : ''}
+//                         placeholder='New password'
+//                         type='password'
+//                         {...register('password', {
+//                            minLength: {
+//                               value: 6,
+//                               message: 'Password must be at least 6 characters'
+//                            },
+//                            maxLength: {
+//                               value: 40,
+//                               message: 'Password must not exceed 40 characters'
+//                            },
+//                         })}
+//                      />
+//                      {errors.password && <span>{errors.password.message}</span>}
+//                   </div>
+
+//                   <div className={styles.field}>
+//                      <label htmlFor='avatar'>Avatar image (url)</label>
+//                      <input
+//                         className={errors.avatar ? styles.error : ''}
+//                         placeholder='Avatar image'
+//                         type='url'
+//                         {...register("avatar", {
+//                            pattern: {
+//                               // value: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
+//                               value: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+$/,
+//                               message: "Invalid url address"
+//                            }
+//                         })}
+//                      />
+//                      {errors.avatar && <span>{errors.avatar.message}</span>}
+//                   </div>
+

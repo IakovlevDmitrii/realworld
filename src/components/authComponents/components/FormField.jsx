@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import styles from "../styles/authComponents.module.scss";
 
 const FormField = ( {
-   label,
    name,
+   label,
    placeholder,
    type,
    register,
