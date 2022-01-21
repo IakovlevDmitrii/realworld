@@ -16,7 +16,6 @@ const EditProfile = ({ user, updateUser }) => {
    const { email, username, token } = user;
 
    const [ isLoading, setIsLoading ] = useState(false);
-
    const { register, handleSubmit, formState: { errors }, setError } = useForm();
 
    const onSubmit = (data) => {
@@ -30,20 +29,25 @@ const EditProfile = ({ user, updateUser }) => {
          }
       }
 
+      setIsLoading(true);
+
       realWorldApi
          .authentication
          .edit(token, detailsToChange)
          .then((res) => {
-            if(res.user) {
-               updateUser(res.user)
+            const userDetails = res.user;
+            const serverErrors = res.errors;
+
+            if(userDetails) {
+               updateUser(userDetails)
             }
 
-            if(res.errors) {
-               for(const error in res.errors) {
-                  if(Object.prototype.hasOwnProperty.call(res.errors, error)){
+            if(serverErrors) {
+               for(const error in serverErrors) {
+                  if(Object.prototype.hasOwnProperty.call(serverErrors, error)){
                      setError(error, {
                         type: "manual",
-                        message: `${error} ${res.errors[error][0]}`,
+                        message: `${error} ${serverErrors[error][0]}`,
                      });
                   }
                }
@@ -90,7 +94,31 @@ const EditProfile = ({ user, updateUser }) => {
       }
    };
 
-   if(isLoading) { return <Spinner /> }
+   const formFields = (formsConfig.editProfile).map((fieldDetails) => {
+      const { name } = fieldDetails;
+      const addedFieldDetails = fieldDetails;
+
+      if(name === 'username') {
+         addedFieldDetails.placeholder = username
+      }
+      if(name === 'email') {
+         addedFieldDetails.placeholder = email
+      }
+
+      return (
+         <FormField
+            {...addedFieldDetails}
+            register={register}
+            validationRules={validationRules[name]}
+            errors={errors}
+            key={name}
+         />
+      )
+   });
+
+   if(isLoading) {
+      return <Spinner />
+   }
 
    return (
       <section className={styles.section}>
@@ -100,42 +128,10 @@ const EditProfile = ({ user, updateUser }) => {
                   <h3>Edit Profile</h3>
                </div>
                <form onSubmit={handleSubmit(onSubmit)}>
-
-                  <FormField
-                     {...formsConfig.editProfile[0]}
-                     placeholder={username}
-                     register={register}
-                     validationRules={validationRules.username}
-                     errors={errors}
-                  />
-
-                  <FormField
-                     {...formsConfig.editProfile[1]}
-                     placeholder={email}
-                     register={register}
-                     validationRules={validationRules.email}
-                     errors={errors}
-                  />
-
-                  <FormField
-                     {...formsConfig.editProfile[2]}
-                     register={register}
-                     validationRules={validationRules.password}
-                     errors={errors}
-                  />
-
-                  <FormField
-                     {...formsConfig.editProfile[3]}
-                     register={register}
-                     validationRules={validationRules.avatar}
-                     errors={errors}
-                  />
-
+                  {formFields}
                   <button
                      className={styles.formButton}
-                     type='submit'>
-                     Save
-                  </button>
+                     type='submit'>Save</button>
                </form>
             </div>
          </div>
@@ -163,6 +159,37 @@ export default connect(
    mapStateToProps,
    mapDispatchToProps
 )(EditProfile);
+
+
+//                   <FormField
+//                      {...formsConfig.editProfile[0]}
+//                      placeholder={username}
+//                      register={register}
+//                      validationRules={validationRules.username}
+//                      errors={errors}
+//                   />
+
+//                   <FormField
+//                      {...formsConfig.editProfile[1]}
+//                      placeholder={email}
+//                      register={register}
+//                      validationRules={validationRules.email}
+//                      errors={errors}
+//                   />
+
+//                   <FormField
+//                      {...formsConfig.editProfile[2]}
+//                      register={register}
+//                      validationRules={validationRules.password}
+//                      errors={errors}
+//                   />
+
+//                   <FormField
+//                      {...formsConfig.editProfile[3]}
+//                      register={register}
+//                      validationRules={validationRules.avatar}
+//                      errors={errors}
+//                   />
 
 //                   <div className={styles.field}>
 //                      <label htmlFor='username'>Username</label>
@@ -196,7 +223,6 @@ export default connect(
 //                      {errors.email && <span>{errors.email.message}</span>}
 //                      {hasErrors.email && <span>Email {hasErrors.email[0]}</span>}
 //                   </div>
-
 
 //                   <div className={styles.field}>
 //                      <label htmlFor='password'>New password</label>
