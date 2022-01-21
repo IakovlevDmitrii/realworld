@@ -9,7 +9,7 @@ import actionCreators from '../../../store/action-creators';
 
 import Spinner from "../../spinner";
 import FormField from './FormField';
-import formsConfig from './formsConfig';
+import formsConfig from '../utils/formsConfig';
 
 import styles from '../styles/authComponents.module.scss';
 

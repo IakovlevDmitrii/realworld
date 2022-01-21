@@ -9,8 +9,9 @@ import actionCreators from '../../../store/action-creators';
 
 import Spinner from "../../spinner";
 import FormField from './FormField';
-import formsConfig from './formsConfig';
 
+import formsConfig from '../utils/formsConfig';
+import rules from '../utils/rules';
 import styles from '../styles/authComponents.module.scss';
 
 const SignUp = ({ updateUser }) => {
@@ -56,51 +57,27 @@ const SignUp = ({ updateUser }) => {
 
    const validationRules = {
       username: {
-         required: 'Username is required',
-         minLength: {
-            value: 3,
-            message: 'Username must be at least 3 characters',
-         },
-         maxLength: {
-            value: 20,
-            message: 'Username must not exceed 20 characters',
-         },
+         ...rules.required('Username'),
+         ...rules.minMaxLength('Username', 3, 20),
       },
 
       email: {
-         required: 'Email is required',
-         // react-hook-form examples
-         // pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-         pattern: {
-            value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-            message: 'Invalid email address',
-         },
+         ...rules.required('Email'),
+         ...rules.email(),
       },
 
       password: {
-         required: 'Password is required',
-         minLength: {
-            value: 6,
-            message: 'Password must be at least 6 characters',
-         },
-         maxLength: {
-            value: 40,
-            message: 'Password must not exceed 40 characters',
-         },
+         ...rules.required('Password'),
+         ...rules.minMaxLength('Password', 6, 40),
       },
 
       passwordConfirmation: {
-         required: 'Repeat Password is required',
-         validate: {
-            match: (value) => {
-               const { password } = getValues();
-               return password === value || "Password does not match";
-            }
-         },
+         ...rules.required('Repeat Password'),
+         ...rules.match(getValues()),
       },
 
       agreement: {
-         required: 'Agreement is required',
+         ...rules.required('Agreement'),
       },
    };
 
@@ -109,7 +86,9 @@ const SignUp = ({ updateUser }) => {
       const addedFieldDetails = fieldDetails;
 
       if(name === 'agreement') {
-         addedFieldDetails.extraClassName = styles.agreement
+         addedFieldDetails.extraClassName = styles.agreement;
+         addedFieldDetails.id = 'agreement';
+         addedFieldDetails.labelBehind = true;
       }
 
       return (
