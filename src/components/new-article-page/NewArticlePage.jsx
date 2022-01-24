@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
 import RealWorldApiService from '../../service';
+
 import Spinner from "../spinner";
 import ArticleEditor from '../article-editor';
 
-const NewArticlePage = ({ token }) => {
+const NewArticlePage = ({ token, isTheArticleNew }) => {
    // title: 'React',
    // description: 'I am learning React-Redux',
    // body: 'I like this',
@@ -14,28 +16,26 @@ const NewArticlePage = ({ token }) => {
 
    const [ isLoading, setIsLoading ] = useState(false);
    const [ hasErrors, setHasErrors ] = useState({});
-   const [ isNewArticleCreated, setIsNewArticleCreated ] = useState(false);
 
    useEffect(() => (
       () => {
          setIsLoading(false);
-         setIsNewArticleCreated(false);
       }
    ), []);
 
    // const onSubmit = ({ tagList, ...rest }) => {
-   const onSubmit = ( articleData ) => {
+   const onSubmit = ( newArticleData ) => {
       setIsLoading(true);
 
       RealWorldApiService
          .articles
-         .create(token, articleData)
+         .create(token, newArticleData)
          .then( (res) => {
             const articleDetails = res.article;
             const serverErrors = res.errors;
 
             if(articleDetails) {
-               setIsNewArticleCreated(true);
+               console.log(articleDetails);
             }
 
             if(serverErrors) {
@@ -56,7 +56,7 @@ const NewArticlePage = ({ token }) => {
 
    return (
       <Route path='/new-article'>
-         {isNewArticleCreated ?
+         {isTheArticleNew ?
             <Redirect to="/articles/:slug" />
             :
             <ArticleEditor
@@ -70,11 +70,13 @@ const NewArticlePage = ({ token }) => {
 };
 
 NewArticlePage.propTypes = {
-   token: PropTypes.string.isRequired
+   token: PropTypes.string.isRequired,
+   isTheArticleNew: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = ({ authentication }) => ({
-   token: authentication.user.token
+const mapStateToProps = ({ authentication, articleData }) => ({
+   token: authentication.user.token,
+   isTheArticleNew: articleData.isTheArticleNew
 });
 
 export default connect(mapStateToProps)(NewArticlePage);

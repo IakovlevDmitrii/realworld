@@ -51,11 +51,11 @@ const ArticleList = () => {
       return <ErrorIndicator />
    }
 
-   const listToShow = articleList.map((articleData) => (
+   const listToShow = articleList.map((article) => (
       <Article
-         articleData={articleData}
+         content={article}
          isPreview
-         key={articleData.slug}
+         key={article.slug}
       />
    ));
 

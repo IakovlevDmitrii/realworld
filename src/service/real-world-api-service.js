@@ -8,7 +8,7 @@ const authentication = {
 
 const articles = {
   all: (page) => getArticles(page),
-  get: (slug) => getArticle(slug),
+  getArticle: (slug) => getArticle(slug),
   create: (token, article) => createArticle(token, article),
 };
 

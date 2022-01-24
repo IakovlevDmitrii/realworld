@@ -11,24 +11,24 @@ import ErrorIndicator from "../../errors/error-indicator";
 
 import styles from './ArticlePage.module.scss';
 
-const ArticlePage = ({ article, deleteArticle }) => {
-
+const ArticlePage = ({ articleData, setArticle, clearArticleData }) => {
+   const { article, isTheArticleNew } = articleData;
    const { slug } = article;
 
    const [ hasError, setHasError ] = useState(false);
    const [ isLoading, setIsLoading ] = useState(true);
-   const [ articleData, setArticleData ] = useState({});
 
-   // Если в store изменится или появится новый slug
-   const loadArticle = useCallback(
-      () => {
+   // Если в store появится slug
+   const loadArticle = useCallback(() => {
+
+      if (!isTheArticleNew) {
          setIsLoading(true);
 
          realWorldApiService
             .articles
-            .get(slug)
+            .getArticle(slug)
             .then((data) => {
-               setArticleData(data);
+               setArticle(data);
             })
             .catch(() => {
                setHasError(true);
@@ -36,8 +36,9 @@ const ArticlePage = ({ article, deleteArticle }) => {
             .finally(() => {
                setIsLoading(false);
             })
+      }
       },
-      [slug]
+      [slug, isTheArticleNew, setArticle]
    );
 
    useEffect(
@@ -47,8 +48,8 @@ const ArticlePage = ({ article, deleteArticle }) => {
 
    // после размонтирования удалим информацию о статье из store
    useEffect(() => (
-      () => {deleteArticle()}
-   ), [deleteArticle]);
+      () => {clearArticleData()}
+   ), [clearArticleData]);
 
    if(isLoading) {
       return <Spinner />
@@ -61,32 +62,56 @@ const ArticlePage = ({ article, deleteArticle }) => {
    return (
       <section className={styles.section}>
          <div className={styles.container}>
-            <Article articleData={articleData} isPreview={false} />
+            <Article content={article} isPreview={false} />
          </div>
       </section>
    )
 };
 
 ArticlePage.propTypes = {
-   article: PropTypes.shape({
-      slug: PropTypes.string,
-
+   articleData: PropTypes.shape({
+      article: PropTypes.shape({
+         author: PropTypes.shape({
+            image: PropTypes.string,
+            username: PropTypes.string
+         }),
+         body: PropTypes.string,
+         createdAt: PropTypes.string,
+         favorited: PropTypes.bool,
+         favoritesCount: PropTypes.number,
+         slug: PropTypes.string,
+         tagList: PropTypes.arrayOf(PropTypes.string),
+         title: PropTypes.string
+      }),
+      isTheArticleNew: PropTypes.bool.isRequired
    }),
-   deleteArticle: PropTypes.func.isRequired,
+   clearArticleData: PropTypes.func.isRequired,
+   setArticle: PropTypes.func.isRequired,
 };
 
 ArticlePage.defaultProps = {
-   article: {
-      slug: '',
+   articleData: {
+      article: {
+         author: {
+            image: '',
+            username: ''
+         },
+         body: '',
+         createdAt: '',
+         favorited: false,
+         favoritesCount: 0,
+         slug: '',
+         tagList: [],
+         title: ''
+      }
    }
 };
 
-const mapStateToProps = ({ articleData }) => ({
-   article: articleData.article
-});
+const mapStateToProps = ({ articleData }) => ({ articleData });
 
 const mapDispatchToProps = {
-   deleteArticle: articleCreators.articleData.deleteArticle,
+   setArticle: articleCreators.articleData.setArticle,
+   clearArticleData: articleCreators.articleData.clearArticleData,
 };
 
 export default connect(

@@ -4,9 +4,7 @@ const { UPDATE_USER, LOG_OUT } = actionTypes.authentication;
 
 const updateUser = (user) => ({
   type: UPDATE_USER,
-  payload: {
-    user,
-  },
+  payload: { user },
 });
 
 const logOut = () => ({

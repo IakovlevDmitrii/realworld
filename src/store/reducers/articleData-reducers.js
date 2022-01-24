@@ -1,6 +1,6 @@
 import actionTypes from '../actions-types';
 
-const { SET_SLUG, DELETE_ARTICLE } = actionTypes.articleData;
+const { SET_SLUG, SET_ARTICLE, NEW_ARTICLE_CREATED, CLEAR_ARTICLE_DATA } = actionTypes.articleData;
 
 const initialState = {
   article: {},
@@ -11,13 +11,25 @@ const articleData = (state = initialState, action) => {
   switch (action.type) {
     case SET_SLUG:
       return {
-        ...state,
         article: {
           slug: action.payload.slug,
         },
+        isTheArticleNew: false,
       };
 
-    case DELETE_ARTICLE:
+    case SET_ARTICLE:
+      return {
+        article: action.payload.article,
+        isTheArticleNew: false,
+      };
+
+    case NEW_ARTICLE_CREATED:
+      return {
+        article: action.payload.article,
+        isTheArticleNew: true,
+      };
+
+    case CLEAR_ARTICLE_DATA:
       return initialState;
 
     default:
