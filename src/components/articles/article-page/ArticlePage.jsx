@@ -41,6 +41,7 @@ const ArticlePage = ({ slug, deleteArticle }) => {
       [loadArticle]
    );
 
+   // после размонтирования удалим информацию о статье из store
    useEffect(() => (
       () => {deleteArticle()}
    ), [deleteArticle]);
