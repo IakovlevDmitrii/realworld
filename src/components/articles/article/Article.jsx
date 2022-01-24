@@ -11,14 +11,10 @@ import favoriteTrueImage from "./images/favorite-true.png";
 import favoriteFalseImage from "./images/favorite-false.png";
 import styles from "./Article.module.scss";
 
-const Article = ({
-   articleData,
-   isPreview,
-   setSlug,
-}) => {
+const Article = ({ content, isPreview, setSlug }) => {
    const {
       author, body, createdAt, favorited, favoritesCount, slug, tagList, title
-   } = articleData;
+   } = content;
 
    const articleTitle = isPreview
       ? (
@@ -71,7 +67,7 @@ const Article = ({
 };
 
 Article.propTypes = {
-   articleData: PropTypes.shape({
+   content: PropTypes.shape({
       author: PropTypes.shape({
          image: PropTypes.string.isRequired,
          username: PropTypes.string.isRequired,
