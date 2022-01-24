@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import article from './article-reducers';
+import articleData from './articleData-reducers';
 import authentication from './auth-reducer';
 
 const reducer = combineReducers({
-  article,
+  articleData,
   authentication,
 });
 

@@ -89,7 +89,7 @@ Article.propTypes = {
 };
 
 const mapDispatchToProps = {
-   setSlug: actionCreators.article.setSlug,
+   setSlug: actionCreators.articleData.setSlug,
 };
 
 export default connect(

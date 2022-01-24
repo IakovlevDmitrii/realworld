@@ -11,11 +11,15 @@ import ErrorIndicator from "../../errors/error-indicator";
 
 import styles from './ArticlePage.module.scss';
 
-const ArticlePage = ({ slug, deleteArticle }) => {
+const ArticlePage = ({ article, deleteArticle }) => {
+
+   const { slug } = article;
+
    const [ hasError, setHasError ] = useState(false);
    const [ isLoading, setIsLoading ] = useState(true);
    const [ articleData, setArticleData ] = useState({});
 
+   // Если в store изменится или появится новый slug
    const loadArticle = useCallback(
       () => {
          setIsLoading(true);
@@ -46,8 +50,13 @@ const ArticlePage = ({ slug, deleteArticle }) => {
       () => {deleteArticle()}
    ), [deleteArticle]);
 
-   if(isLoading) { return <Spinner /> }
-   if(hasError) { return <ErrorIndicator /> }
+   if(isLoading) {
+      return <Spinner />
+   }
+
+   if(hasError) {
+      return <ErrorIndicator />
+   }
 
    return (
       <section className={styles.section}>
@@ -59,16 +68,25 @@ const ArticlePage = ({ slug, deleteArticle }) => {
 };
 
 ArticlePage.propTypes = {
-   slug: PropTypes.string.isRequired,
+   article: PropTypes.shape({
+      slug: PropTypes.string,
+
+   }),
    deleteArticle: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ article }) => ({
-   slug: article.slug,
+ArticlePage.defaultProps = {
+   article: {
+      slug: '',
+   }
+};
+
+const mapStateToProps = ({ articleData }) => ({
+   article: articleData.article
 });
 
 const mapDispatchToProps = {
-   deleteArticle: articleCreators.article.deleteArticle,
+   deleteArticle: articleCreators.articleData.deleteArticle,
 };
 
 export default connect(

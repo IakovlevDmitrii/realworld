@@ -1,4 +1,4 @@
-const article = {
+const articleData = {
   SET_SLUG: 'SET_SLUG',
   DELETE_ARTICLE: 'DELETE_ARTICLE',
 };
@@ -9,7 +9,7 @@ const authentication = {
 };
 
 const actionTypes = {
-  article,
+  articleData,
   authentication,
 };
 

@@ -1,9 +1,9 @@
+import articleData from './articleData';
 import authentication from './authentication';
-import article from './article';
 
 const actionCreators = {
+  articleData,
   authentication,
-  article,
 };
 
 export default actionCreators;

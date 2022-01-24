@@ -17,11 +17,11 @@ Routing Guidelines
     ..List of articles
     ..Pagination for list of articles
 
-.Article page (URL:/articles/article-slug-here)
+.Article page (URL:/articles/articleData-slug-here)
     ..Article page
 
-.Editor page to edit articles (URL:/articles/article-slug-here/edit)
-    ..Edit article form
+.Editor page to edit articles (URL:/articles/articleData-slug-here/edit)
+    ..Edit articleData form
 
-.Editor page to create articles (URL:/new-article)
-    ..Create article form
+.Editor page to create articles (URL:/new-articleData)
+    ..Create articleData form

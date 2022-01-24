@@ -1,21 +1,19 @@
 import actionTypes from '../actions-types';
 
-const { SET_SLUG, DELETE_ARTICLE } = actionTypes.article;
+const { SET_SLUG, DELETE_ARTICLE } = actionTypes.articleData;
 
 const setSlug = (slug) => ({
   type: SET_SLUG,
-  payload: {
-    slug,
-  },
+  payload: { slug },
 });
 
 const deleteArticle = () => ({
   type: DELETE_ARTICLE,
 });
 
-const article = {
+const articleData = {
   setSlug,
   deleteArticle,
 };
 
-export default article;
+export default articleData;
