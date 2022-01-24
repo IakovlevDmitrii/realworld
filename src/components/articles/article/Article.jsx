@@ -14,7 +14,7 @@ import styles from "./Article.module.scss";
 const Article = ({
    articleData,
    isPreview,
-   changeSlug,
+   setSlug,
 }) => {
    const {
       author, body, createdAt, favorited, favoritesCount, slug, tagList, title
@@ -24,7 +24,7 @@ const Article = ({
       ? (
          <Link
             to={`/articles/:${slug}`}
-            onClick={() => changeSlug(slug)} >
+            onClick={() => setSlug(slug)} >
             <h2>{title}</h2>
          </Link> )
       : (
@@ -84,12 +84,12 @@ Article.propTypes = {
       tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
       title: PropTypes.string.isRequired,
    }).isRequired,
-   changeSlug: PropTypes.func.isRequired,
+   setSlug: PropTypes.func.isRequired,
    isPreview: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = {
-   changeSlug: actionCreators.article.changeSlug,
+   setSlug: actionCreators.article.setSlug,
 };
 
 export default connect(

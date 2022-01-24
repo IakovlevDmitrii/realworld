@@ -1,5 +1,6 @@
 const article = {
   SET_SLUG: 'SET_SLUG',
+  DELETE_ARTICLE: 'DELETE_ARTICLE',
 };
 
 const authentication = {

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 
 import realWorldApiService from '../../../service';
+import articleCreators from '../../../store/action-creators';
 
 import Article from '../article';
 import Spinner from "../../spinner";
@@ -10,7 +11,7 @@ import ErrorIndicator from "../../errors/error-indicator";
 
 import styles from './ArticlePage.module.scss';
 
-const ArticlePage = ({ slug }) => {
+const ArticlePage = ({ slug, deleteArticle }) => {
    const [ hasError, setHasError ] = useState(false);
    const [ isLoading, setIsLoading ] = useState(true);
    const [ articleData, setArticleData ] = useState({});
@@ -40,6 +41,10 @@ const ArticlePage = ({ slug }) => {
       [loadArticle]
    );
 
+   useEffect(() => (
+      () => {deleteArticle()}
+   ), [deleteArticle]);
+
    if(isLoading) { return <Spinner /> }
    if(hasError) { return <ErrorIndicator /> }
 
@@ -54,12 +59,18 @@ const ArticlePage = ({ slug }) => {
 
 ArticlePage.propTypes = {
    slug: PropTypes.string.isRequired,
+   deleteArticle: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ article }) => ({
    slug: article.slug,
 });
 
+const mapDispatchToProps = {
+   deleteArticle: articleCreators.article.deleteArticle,
+};
+
 export default connect(
    mapStateToProps,
+   mapDispatchToProps
 )(ArticlePage);
