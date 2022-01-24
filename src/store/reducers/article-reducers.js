@@ -1,12 +1,12 @@
 import actionTypes from '../actions-types';
 
-const { CHANGE_SLUG } = actionTypes.article;
+const { SET_SLUG } = actionTypes.article;
 const initialState = {
   slug: '',
 };
 
 const article = (state = initialState, action) => {
-  if (action.type === CHANGE_SLUG) {
+  if (action.type === SET_SLUG) {
     return {
       slug: action.payload.slug,
     };

@@ -24,14 +24,15 @@ const ArticlePage = ({ slug }) => {
             .get(slug)
             .then((data) => {
                setArticleData(data);
-               setIsLoading(false);
             })
             .catch(() => {
                setHasError(true);
+            })
+            .finally(() => {
                setIsLoading(false);
             })
       },
-      [ slug ]
+      [slug]
    );
 
    useEffect(

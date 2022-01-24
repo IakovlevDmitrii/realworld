@@ -1,9 +1,9 @@
 import actionTypes from '../actions-types';
 
-const { CHANGE_SLUG } = actionTypes.article;
+const { SET_SLUG } = actionTypes.article;
 
 const changeSlug = (slug) => ({
-  type: CHANGE_SLUG,
+  type: SET_SLUG,
   payload: {
     slug,
   },

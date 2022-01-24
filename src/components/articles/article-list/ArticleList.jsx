@@ -18,32 +18,38 @@ const ArticleList = () => {
    const [ isLoading, setIsLoading ] = useState(true);
    const [ articleList, setArticleList ] = useState([]);
 
-   // when changing the page number of articles
-   const loadArticleList = useCallback(
-      () => {
+   const loadArticleList = useCallback( () => {
          setIsLoading(true);
 
-         // articles upload request
          realWorldApiService
             .articles
             .all(page)
             .then( ({ articles, articlesCount }) => {
                setArticleList(articles);
                setCount(articlesCount);
-               setIsLoading(false);
             })
             .catch( () => {
                setHasError(true);
+            })
+            .finally(() => {
                setIsLoading(false);
-            });
+            })
       },
       [ page ]
    );
 
-   useEffect(() => loadArticleList(), [loadArticleList]);
+   useEffect(
+      () => loadArticleList(),
+      [loadArticleList]
+   );
 
-   if(isLoading) { return <Spinner /> }
-   if(hasError) { return <ErrorIndicator /> }
+   if(isLoading) {
+      return <Spinner />
+   }
+
+   if(hasError) {
+      return <ErrorIndicator />
+   }
 
    const listToShow = articleList.map((articleData) => (
       <Article

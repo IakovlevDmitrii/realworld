@@ -1,5 +1,5 @@
 const article = {
-  CHANGE_SLUG: 'CHANGE_SLUG',
+  SET_SLUG: 'SET_SLUG',
 };
 
 const authentication = {

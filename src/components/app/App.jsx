@@ -3,10 +3,9 @@ import { connect } from "react-redux";
 import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-// import components
 import ArticleList from '../articles/article-list';
 import ArticlePage from '../articles/article-page';
-import ArticleCreationPage from '../article-creation-page';
+import NewArticlePage from '../new-article-page';
 import Header from '../header';
 import { SignIn, SignUp, EditProfile } from '../authComponents';
 
@@ -18,6 +17,7 @@ const App = ({ isLoggedIn }) => (
       <Switch>
          <Route path='/articles/:slug' component={ArticlePage} />
          <Route path='/articles' component={ArticleList} />
+         <Route path='/new-article' component={NewArticlePage} />
          <Route path='/sign-in'>
             {isLoggedIn ? <Redirect to="/articles" /> : <SignIn />}
          </Route>
@@ -27,14 +27,13 @@ const App = ({ isLoggedIn }) => (
          <Route path='/profile'>
             {isLoggedIn ? <EditProfile /> : <Redirect to="/articles" />}
          </Route>
-         <Route path='/new-article' component={ArticleCreationPage} />
-         <Redirect from='/' to='/articles'/>
+         <Redirect from='/' to='/articles' />
       </Switch>
    </div>
 );
 
 App.propTypes = {
-   isLoggedIn: PropTypes.bool.isRequired,
+   isLoggedIn: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = ({ authentication }) => ({

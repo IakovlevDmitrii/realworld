@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -13,12 +13,35 @@ const ArticleEditor = ({ title, onFormSubmit, defaultValues, hasErrors }) => {
 
    const { fields, remove, append } = useFieldArray({
       name: 'tagList',
-      control,
+      control
    });
 
-   const getClassNames = (inputName) => (
+   const onArticleCreated = ({ tagList, ...rest }) => {
+      const articleData = {
+         article: {...rest}
+      };
+
+      const tagsListToSend = [];
+
+      // Если есть теги, сохраним их в массив tagsListToSend
+      tagList.forEach(({ value }) => {
+         if(value) {
+            tagsListToSend.push(value)
+         }
+      });
+
+      if(tagsListToSend.length) {
+         articleData
+            .article
+            .tagList = tagsListToSend
+      }
+
+      onFormSubmit(articleData)
+   };
+
+   const getClassNames = (fieldName) => (
       classNames({
-         [styles.error]: errors[inputName] || hasErrors[inputName]
+         [styles.error]: errors[fieldName] || hasErrors[fieldName]
       })
    );
 
@@ -29,15 +52,14 @@ const ArticleEditor = ({ title, onFormSubmit, defaultValues, hasErrors }) => {
                <div className={styles.title}>
                   <h3>{title}</h3>
                </div>
-               <form onSubmit={handleSubmit(onFormSubmit)}>
+               <form onSubmit={handleSubmit(onArticleCreated)}>
                   <div className={styles.field}>
                      <label htmlFor='title'>Title</label>
                      <input
                         className={getClassNames('title')}
                         placeholder='Title'
                         type='text'
-                        {...register(
-                           'title',
+                        {...register('title',
                            {required: 'Title is required'}
                         )}
                      />
@@ -53,8 +75,7 @@ const ArticleEditor = ({ title, onFormSubmit, defaultValues, hasErrors }) => {
                      <input
                         className={getClassNames('description')}
                         type='text'
-                        {...register(
-                           'description',
+                        {...register('description',
                            {required: 'Description is required'}
                         )}
                      />
@@ -71,8 +92,7 @@ const ArticleEditor = ({ title, onFormSubmit, defaultValues, hasErrors }) => {
                         className={getClassNames('body')}
                         rows={7}
                         placeholder='Text'
-                        {...register(
-                           'body',
+                        {...register('body',
                            {required: 'Text is required'}
                         )} />
                      {errors.body && (
