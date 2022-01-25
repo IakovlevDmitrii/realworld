@@ -62,7 +62,7 @@ const ArticlePage = ({ articleData, setArticle, clearArticleData }) => {
    return (
       <section className={styles.section}>
          <div className={styles.container}>
-            <Article content={article} isPreview={false} />
+            <Article content={article} />
          </div>
       </section>
    )
@@ -75,7 +75,6 @@ ArticlePage.propTypes = {
             image: PropTypes.string,
             username: PropTypes.string
          }),
-         body: PropTypes.string,
          createdAt: PropTypes.string,
          favorited: PropTypes.bool,
          favoritesCount: PropTypes.number,

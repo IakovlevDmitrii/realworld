@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
+import classNames from "classnames";
 
 import PersonDetails from "../person-details";
 
@@ -13,18 +14,18 @@ import styles from "./Article.module.scss";
 
 const Article = ({ content, isPreview, setSlug }) => {
    const {
-      author, createdAt, description, favorited, favoritesCount, slug, tagList, title
+      author, body, createdAt, description, favorited, favoritesCount, slug, tagList, title
    } = content;
 
-   const articleTitle = isPreview
-      ? (
-         <Link
-            to={`/articles/:${slug}`}
-            onClick={() => setSlug(slug)} >
-            <h2>{title}</h2>
-         </Link> )
-      : (
-         <h2>{title}</h2> );
+   const articleTitle = isPreview ? (
+      <Link
+         to={`/articles/:${slug}`}
+         onClick={() => setSlug(slug)} >
+         <h2>{title}</h2>
+      </Link>
+   ) : (
+      <h2>{title}</h2>
+   );
 
    const tags = tagList.map((tag) => (
       <div className={styles.tag} key={tag}>
@@ -32,9 +33,20 @@ const Article = ({ content, isPreview, setSlug }) => {
       </div>
    ));
 
+   const isPreviewClass = (name) => {
+      const namePreview = `${name}Preview`;
+
+      return (
+         classNames({
+            [styles[name]]: true,
+            [styles[namePreview]]: isPreview,
+         })
+      )
+   };
+
    return (
       <article className={styles.content}>
-         <div className={styles.article}>
+         <div className={isPreviewClass('article')}>
             <div className={styles.info}>
                <div className={styles.title}>
                   {articleTitle}
@@ -51,9 +63,12 @@ const Article = ({ content, isPreview, setSlug }) => {
                   {tags}
                </div>
             </div>
-            <div className={styles.body}>
+            <div className={styles.description}>
                <p>{description}</p>
             </div>
+         </div>
+         <div className={isPreviewClass('body')}>
+            {body}
          </div>
          <div className={styles.author}>
             <PersonDetails
@@ -72,6 +87,7 @@ Article.propTypes = {
          image: PropTypes.string.isRequired,
          username: PropTypes.string.isRequired,
       }).isRequired,
+      body: PropTypes.string,
       createdAt: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       favorited: PropTypes.bool.isRequired,
@@ -79,9 +95,14 @@ Article.propTypes = {
       slug: PropTypes.string.isRequired,
       tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
       title: PropTypes.string.isRequired,
-   }).isRequired,
+   }),
    setSlug: PropTypes.func.isRequired,
-   isPreview: PropTypes.bool.isRequired,
+   isPreview: PropTypes.bool,
+};
+
+Article.defaultProps = {
+   content: {body: ''},
+   isPreview: false
 };
 
 const mapDispatchToProps = {
