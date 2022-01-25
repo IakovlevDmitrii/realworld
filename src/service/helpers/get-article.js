@@ -7,15 +7,15 @@ const getArticle = async (segment) => {
 
   try {
     const response = await getResource(url);
-    const { author, body, createdAt, favorited, favoritesCount, slug, tagList, title } = response.article;
+    const { author, createdAt, description, favorited, favoritesCount, slug, tagList, title } = response.article;
 
     return {
       author: {
         image: author.image,
         username: author.username,
       },
-      body,
       createdAt: format(new Date(createdAt), 'MMMM d, yyyy'),
+      description,
       favorited,
       favoritesCount,
       slug,

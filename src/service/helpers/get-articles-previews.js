@@ -3,7 +3,7 @@ import getResource from './get-resource';
 import { cropText } from '../../utils';
 import BASE_URL from './base-url';
 
-const getArticles = async (page) => {
+const getArticlesPreviews = async (page) => {
   const url = `${BASE_URL}/articles?limit=5&offset=${(page - 1) * 5}`;
 
   try {
@@ -11,15 +11,15 @@ const getArticles = async (page) => {
     const { articles, articlesCount } = response;
 
     const newArticles = articles.map((article) => {
-      const { author, body, createdAt, favorited, favoritesCount, slug, tagList, title } = article;
+      const { author, createdAt, description, favorited, favoritesCount, slug, tagList, title } = article;
 
       return {
         author: {
           image: author.image,
           username: author.username,
         },
-        body: cropText(body, 170),
         createdAt: format(new Date(createdAt), 'MMMM d, yyyy'),
+        description: cropText(description, 170),
         favorited,
         favoritesCount,
         slug,
@@ -37,4 +37,4 @@ const getArticles = async (page) => {
   }
 };
 
-export default getArticles;
+export default getArticlesPreviews;

@@ -13,7 +13,7 @@ import styles from "./Article.module.scss";
 
 const Article = ({ content, isPreview, setSlug }) => {
    const {
-      author, body, createdAt, favorited, favoritesCount, slug, tagList, title
+      author, createdAt, description, favorited, favoritesCount, slug, tagList, title
    } = content;
 
    const articleTitle = isPreview
@@ -52,7 +52,7 @@ const Article = ({ content, isPreview, setSlug }) => {
                </div>
             </div>
             <div className={styles.body}>
-               <p>{body}</p>
+               <p>{description}</p>
             </div>
          </div>
          <div className={styles.author}>
@@ -72,8 +72,8 @@ Article.propTypes = {
          image: PropTypes.string.isRequired,
          username: PropTypes.string.isRequired,
       }).isRequired,
-      body: PropTypes.string.isRequired,
       createdAt: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
       favorited: PropTypes.bool.isRequired,
       favoritesCount: PropTypes.number.isRequired,
       slug: PropTypes.string.isRequired,

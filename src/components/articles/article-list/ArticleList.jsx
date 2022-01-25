@@ -23,7 +23,7 @@ const ArticleList = () => {
 
          realWorldApiService
             .articles
-            .all(page)
+            .getPreviews(page)
             .then( ({ articles, articlesCount }) => {
                setArticleList(articles);
                setCount(articlesCount);

@@ -1,4 +1,4 @@
-import { registerUser, loginUser, editProfile, getArticle, getArticles, createArticle } from './helpers';
+import { registerUser, loginUser, editProfile, getArticle, getArticlesPreviews, createArticle } from './helpers';
 
 const authentication = {
   register: (username, email, password) => registerUser(username, email, password),
@@ -7,7 +7,7 @@ const authentication = {
 };
 
 const articles = {
-  all: (page) => getArticles(page),
+  getPreviews: (page) => getArticlesPreviews(page),
   getArticle: (slug) => getArticle(slug),
   create: (token, article) => createArticle(token, article),
 };
