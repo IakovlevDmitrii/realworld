@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import realWorldApiService from '../../../service';
 import articleCreators from '../../../store/action-creators';
 
-import Article from '../article';
+import Article from '../../articles/article';
 import Spinner from "../../spinner";
 import ErrorIndicator from "../../errors/error-indicator";
 
@@ -37,6 +37,8 @@ const ArticlePage = ({ articleData, setArticle, clearArticleData }) => {
                setIsLoading(false);
             })
       }
+
+         setIsLoading(false);
       },
       [slug, isTheArticleNew, setArticle]
    );

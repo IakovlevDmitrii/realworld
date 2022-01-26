@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Pagination } from 'antd';
 
-import Article from '../article';
-import Spinner from "../../spinner";
-import ErrorIndicator from "../../errors/error-indicator";
+import Article from '../articles/article';
+import Spinner from "../spinner";
+import ErrorIndicator from "../errors/error-indicator";
 
-import realWorldApiService from '../../../service';
+import realWorldApiService from '../../service';
 
 import 'antd/dist/antd.css';
 import './pagination.css';

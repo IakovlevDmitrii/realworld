@@ -3,10 +3,9 @@ import { connect } from "react-redux";
 import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import ArticleList from '../articles/article-list';
-import ArticlePage from '../articles/article-page';
-import NewArticlePage from '../new-article-page';
 import Header from '../header';
+import ArticlesPage from '../pages/articles-page';
+import NewArticlePage from '../new-article-page';
 import { SignIn, SignUp, EditProfile } from '../authComponents';
 
 import styles from './styles/app.module.scss';
@@ -15,8 +14,9 @@ const App = ({ isLoggedIn }) => (
    <div className={styles.content}>
       <Header />
       <Switch>
-         <Route path='/articles/:slug' component={ArticlePage} />
-         <Route path='/articles' component={ArticleList} />
+         <Route path='/articles'>
+            <ArticlesPage />
+         </Route>
          <Route path='/new-article' component={NewArticlePage} />
          <Route path='/sign-in'>
             {isLoggedIn ? <Redirect to="/articles" /> : <SignIn />}

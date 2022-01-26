@@ -168,14 +168,17 @@ ArticleEditor.propTypes = {
 };
 
 ArticleEditor.defaultProps = {
-   defaultValues: {
-      title: '',
-      description: '',
-      body: '',
-      tagList: [
-         {value: ''}
-      ]
-   },
+   // Delete -------------------
+   defaultValues: {    //      |
+      title: '',       //      |
+      description: '', //      |
+      body: '',        //      |
+      tagList: [       //      |
+         {value: ''}   //      |
+      ]                //      |
+   },                  //      |
+   // -------------------------
+
    hasErrors: {
       title: [''],
       description: '',
