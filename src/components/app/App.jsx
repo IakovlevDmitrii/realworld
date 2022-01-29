@@ -4,8 +4,8 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Header from '../header';
-import ArticlesPage from '../pages/articles-page';
-import NewArticlePage from '../new-article-page';
+import HomePage from '../pages/home-page';
+import NewArticlePage from '../pages/new-article-page';
 import { SignIn, SignUp, EditProfile } from '../authComponents';
 
 import styles from './styles/app.module.scss';
@@ -15,7 +15,7 @@ const App = ({ isLoggedIn }) => (
       <Header />
       <Switch>
          <Route path='/articles'>
-            <ArticlesPage />
+            <HomePage />
          </Route>
          <Route path='/new-article' component={NewArticlePage} />
          <Route path='/sign-in'>
