@@ -3,22 +3,15 @@ import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import RealWorldApiService from '../../service';
-import actionCreators from '../../store/action-creators';
-import transformArticle from '../../utils/transform-article';
+import RealWorldApiService from '../../../service';
 
-import Spinner from "../spinner";
-import ArticleEditor from '../article-editor';
+import Spinner from "../../spinner";
+import ArticleEditor from '../../article-editor';
 
-const NewArticlePage = ({ token, isTheArticleNew, newArticleCreated }) => {
-   // title: 'React',
-   // description: 'I am learning React-Redux',
-   // body: 'I like this',
-   // tagList: [{value: 'a'}, {value: 'b'}]
-
+const NewArticlePage = ({ token }) => {
+   const [ slug, setSlug ] = useState('');
    const [ hasErrors, setHasErrors ] = useState({});
    const [ isLoading, setIsLoading ] = useState(false);
-   const [ slug, setSlug ] = useState('');
 
    const getInitialValues = () => ({
       title: '',
@@ -29,16 +22,11 @@ const NewArticlePage = ({ token, isTheArticleNew, newArticleCreated }) => {
       ]
    });
 
-   const initialValues = useMemo(() => getInitialValues(), []);
+   const initialValues = useMemo(
+      () => getInitialValues(),
+      []
+   );
 
-   // const initialValues = {
-   //    title: '',
-   //    description: '',
-   //    body: '',
-   //    tagList: [
-   //       {value: ''}
-   //    ]
-   // };
    const [ defaultValues, setDefaultValues ] = useState(initialValues);
 
    useEffect(() => (
@@ -48,7 +36,6 @@ const NewArticlePage = ({ token, isTheArticleNew, newArticleCreated }) => {
       }
    ), [initialValues]);
 
-   // const onSubmit = ({ tagList, ...rest }) => {
    const onSubmit = ( newArticleData ) => {
       setIsLoading(true);
 
@@ -61,10 +48,6 @@ const NewArticlePage = ({ token, isTheArticleNew, newArticleCreated }) => {
 
             if(articleDetails) {
                setSlug(articleDetails.slug);
-
-               newArticleCreated(
-                  transformArticle(articleDetails)
-               )
             }
 
             if(serverErrors) {
@@ -97,8 +80,8 @@ const NewArticlePage = ({ token, isTheArticleNew, newArticleCreated }) => {
 
    return (
       <Route path='/new-article'>
-         {isTheArticleNew ?
-            <Redirect to={`/articles/:${slug}`} />
+         {slug ?
+            <Redirect to={`/articles/${slug}`} />
             :
             <ArticleEditor
                title='Create new article'
@@ -113,22 +96,14 @@ const NewArticlePage = ({ token, isTheArticleNew, newArticleCreated }) => {
 
 NewArticlePage.propTypes = {
    token: PropTypes.string.isRequired,
-   isTheArticleNew: PropTypes.bool.isRequired,
-   newArticleCreated: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ authentication, articleData }) => ({
+const mapStateToProps = ({ authentication }) => ({
    token: authentication.user.token,
-   isTheArticleNew: articleData.isTheArticleNew
 });
 
-const mapDispatchToProps = {
-   newArticleCreated: actionCreators.articleData.newArticleCreated
-};
-
 export default connect(
-   mapStateToProps,
-   mapDispatchToProps
+   mapStateToProps
 )(NewArticlePage);
 
 // {"article":{
@@ -141,3 +116,21 @@ export default connect(
 // "tagList":["a","b"],"author":{"username":"aaaf","bio":null,"image":"https://api.realworld.io/images/smiley-cyrus.jpeg"},"favoritedBy":[],"_count":{"favoritedBy":0},
 // "favoritesCount":0,
 // "favorited":false}}
+
+// article: {title: "React AAA", slug: "React-AAA-900", body: "I like this",…}
+// author: {username: "aaaf", bio: null, image: "https://api.realworld.io/images/smiley-cyrus.jpeg",…}
+// bio: null
+// followedBy: []
+// following: false
+// image: "https://api.realworld.io/images/smiley-cyrus.jpeg"
+// username: "aaaf"
+// body: "I like this"
+// createdAt: "2022-01-29T20:10:14.455Z"
+// description: "I am learning React-Redux"
+// favorited: false
+// favoritesCount: 0
+// slug: "React-AAA-900"
+// tagList: ["a"]
+// 0: "a"
+// title: "React AAA"
+// updatedAt: "2022-01-29T20:10:14.455Z"
