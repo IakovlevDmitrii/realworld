@@ -17,7 +17,9 @@ const App = ({ isLoggedIn }) => (
          <Route path='/articles'>
             <HomePage />
          </Route>
-         <Route path='/new-article' component={NewArticlePage} />
+         <Route path='/new-article'>
+            <NewArticlePage />
+         </Route>
          <Route path='/sign-in'>
             {isLoggedIn ? <Redirect to="/articles" /> : <SignIn />}
          </Route>
