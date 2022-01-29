@@ -3,19 +3,19 @@ import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import ArticlePage from '../article-page';
 import ArticleList from '../../article-list';
 
-const ArticlesPage = () => {
-   const match = useRouteMatch();
+const HomePage = () => {
+   const  { path } = useRouteMatch();
 
    return (
       <Switch>
-         <Route path={`${match.path}/:slug`}>
+         <Route path={`${path}/:slug`}>
             <ArticlePage />
          </Route>
-         <Route path={match.path}>
+         <Route path={path}>
             <ArticleList />
          </Route>
       </Switch>
    )
 };
 
-export default ArticlesPage;
+export default HomePage;
