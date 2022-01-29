@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Pagination } from 'antd';
 
-import Article from '../articles/article';
+import Article from '../article';
 import Spinner from "../spinner";
 import ErrorIndicator from "../errors/error-indicator";
 
