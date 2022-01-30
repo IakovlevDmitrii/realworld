@@ -29,6 +29,23 @@ const Article = ({ content, isPreview }) => {
       </div>
    ));
 
+   const buttons = isPreview ? null : (
+      <div className={styles.buttons}>
+         <button
+            className={styles.deleteArticleButton}
+            onClick={() => console.log('delete')}
+            type='button'>
+            Delete
+         </button>
+         <button
+            className={styles.editArticleButton}
+            onClick={() => console.log('edit')}
+            type='button'>
+            Edit
+         </button>
+      </div>
+   );
+
    const isPreviewClass = (name) => {
       const namePreview = `${name}Preview`;
 
@@ -74,6 +91,7 @@ const Article = ({ content, isPreview }) => {
                date={createdAt}
                src={author.image}
                alt="user's avatar" />
+            {buttons}
          </div>
       </article>
    )
