@@ -7,6 +7,7 @@ import Header from '../header';
 import HomePage from '../pages/home-page';
 import NewArticlePage from '../pages/new-article-page';
 import { SignIn, SignUp, EditProfile } from '../authComponents';
+import PrivateRoute from '../private-route';
 
 import styles from './styles/app.module.scss';
 
@@ -17,9 +18,9 @@ const App = ({ isLoggedIn }) => (
          <Route path='/articles'>
             <HomePage />
          </Route>
-         <Route path='/new-article'>
+         <PrivateRoute path='/new-article' auth={isLoggedIn}>
             <NewArticlePage />
-         </Route>
+         </PrivateRoute>
          <Route path='/sign-in'>
             {isLoggedIn ? <Redirect to="/articles" /> : <SignIn />}
          </Route>
