@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { Redirect, Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import RealWorldApiService from '../../../service';
@@ -36,12 +36,12 @@ const NewArticlePage = ({ token }) => {
       }
    ), [initialValues]);
 
-   const onSubmit = ( newArticleData ) => {
+   const onSubmit = ( newArticleContent ) => {
       setIsLoading(true);
 
       RealWorldApiService
          .articles
-         .create(token, newArticleData)
+         .create(token, newArticleContent)
          .then( (res) => {
             const articleDetails = res.article;
             const serverErrors = res.errors;
@@ -53,7 +53,7 @@ const NewArticlePage = ({ token }) => {
             if(serverErrors) {
                // tagList в newArticleData это массив строк вида ['a', 'b']
                // а в defaultValues надо сохранить tagList в виде [ {value: 'a'}, {value: 'b'} ]
-               const { article } = newArticleData;
+               const { article } = newArticleContent;
                const { tagList, ...rest } = article;
                const newArticle = {...rest};
                newArticle.tagList = [];

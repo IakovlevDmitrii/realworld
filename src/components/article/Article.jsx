@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
+import ReactMarkdown from 'react-markdown';
 import classNames from "classnames";
 
 import PersonDetails from "../person-details";
@@ -63,7 +64,9 @@ const Article = ({ content, isPreview }) => {
             </div>
          </div>
          <div className={isPreviewClass('body')}>
-            {body}
+            <ReactMarkdown>
+               {body}
+            </ReactMarkdown>
          </div>
          <div className={styles.author}>
             <PersonDetails

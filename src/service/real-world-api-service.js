@@ -9,7 +9,7 @@ const authentication = {
 const articles = {
   getPreviews: (page) => getArticlesPreviews(page),
   getArticle: (slug) => getArticle(slug),
-  create: (token, article) => createArticle(token, article),
+  create: (token, content) => createArticle(token, content),
 };
 
 class RealWorldApiService {
