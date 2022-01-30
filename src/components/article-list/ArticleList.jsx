@@ -64,16 +64,17 @@ const ArticleList = () => {
          <div className={styles.container}>
             <div className={styles.content}>
                {listToShow}
-               <Pagination
-                  current={page}
-                  onChange={(pageNumber) => setPage(pageNumber)}
-                  total={count}
-                  hideOnSinglePage
-                  pageSize="5"
-                  size="small"
-                  showSizeChanger={false}
-                  className={styles.pagination}
-               />
+               <div className={styles.pagination}>
+                  <Pagination
+                     current={page}
+                     onChange={(pageNumber) => setPage(pageNumber)}
+                     total={count}
+                     hideOnSinglePage
+                     pageSize="5"
+                     size="small"
+                     showSizeChanger={false}
+                  />
+               </div>
             </div>
          </div>
       </section>

@@ -13,6 +13,11 @@
    }
 }
 
+.pagination {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
 //.ant-pagination-item-active {
 //  background: $brand_primary__2;
 //  border-radius: 4px;
