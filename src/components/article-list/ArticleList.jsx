@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Pagination } from 'antd';
 
-import Article from '../article';
+import ArticlePreview from '../article-preview';
 import Spinner from "../spinner";
 import ErrorIndicator from "../errors/error-indicator";
 
@@ -52,9 +52,8 @@ const ArticleList = () => {
    }
 
    const listToShow = articleList.map((article) => (
-      <Article
+      <ArticlePreview
          content={article}
-         isPreview
          key={article.slug}
       />
    ));

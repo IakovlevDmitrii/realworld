@@ -1,20 +1,17 @@
 import React from 'react';
-import { Link, useRouteMatch } from "react-router-dom";
-import PropTypes from 'prop-types';
-import ReactMarkdown from 'react-markdown';
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import PersonDetails from "../person-details";
 
-import favoriteTrueImage from "./images/favorite-true.png";
-import favoriteFalseImage from "./images/favorite-false.png";
-import styles from "./Article.module.scss";
+import favoriteTrueImage from "../article/images/favorite-true.png";
+import favoriteFalseImage from "../article/images/favorite-false.png";
+import styles from './ArticlePreview.module.scss';
 
-const Article = ({ content }) => {
+const ArticlePreview = ({ content }) => {
    const {
-      author, body, createdAt, description, favorited, favoritesCount, tagList, title
+      author, createdAt, description, favorited, favoritesCount, slug, tagList, title
    } = content;
-
-   const { url } = useRouteMatch();
 
    const tags = tagList.map((tag) => (
       <div className={styles.tag} key={tag}>
@@ -27,7 +24,9 @@ const Article = ({ content }) => {
          <div className={styles.article}>
             <div className={styles.info}>
                <div className={styles.title}>
-                  <h2>{title}</h2>
+                  <Link to={`/articles/${slug}`}>
+                     <h2>{title}</h2>
+                  </Link>
                   <div className={styles.favorites}>
                      <img
                         src={favorited ? favoriteTrueImage : favoriteFalseImage}
@@ -45,44 +44,23 @@ const Article = ({ content }) => {
                <p>{description}</p>
             </div>
          </div>
-         <div className={styles.body}>
-            <ReactMarkdown>
-               {body}
-            </ReactMarkdown>
-         </div>
          <div className={styles.author}>
             <PersonDetails
                name={author.username}
                date={createdAt}
                src={author.image}
                alt="user's avatar" />
-            <div className={styles.buttons}>
-               <button
-                  className={styles.deleteArticleButton}
-                  onClick={() => console.log('delete')}
-                  type='button'>
-                  Delete
-               </button>
-               <Link to={`${url}/edit`}>
-                  <button
-                     className={styles.editArticleButton}
-                     type='button'>
-                     Edit
-                  </button>
-               </Link>
-            </div>
          </div>
       </article>
    )
 };
 
-Article.propTypes = {
+ArticlePreview.propTypes = {
    content: PropTypes.shape({
       author: PropTypes.shape({
          image: PropTypes.string.isRequired,
          username: PropTypes.string.isRequired,
       }).isRequired,
-      body: PropTypes.string.isRequired,
       createdAt: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       favorited: PropTypes.bool.isRequired,
@@ -93,4 +71,4 @@ Article.propTypes = {
    }).isRequired
 };
 
-export default Article;
+export default ArticlePreview;
