@@ -17,13 +17,12 @@ const ArticleEditor = ({ title, onFormSubmit, defaultValues, hasErrors }) => {
    });
 
    const onArticleCreated = ({ tagList, ...rest }) => {
-      const articleData = {
-         article: {...rest}
+      const newArticleContent = {
+         ...rest
       };
 
-      const tagsListToSend = [];
-
       // Если есть теги, сохраним их в массив tagsListToSend
+      const tagsListToSend = [];
       tagList.forEach(({ value }) => {
          if(value) {
             tagsListToSend.push(value)
@@ -31,12 +30,11 @@ const ArticleEditor = ({ title, onFormSubmit, defaultValues, hasErrors }) => {
       });
 
       if(tagsListToSend.length) {
-         articleData
-            .article
+         newArticleContent
             .tagList = tagsListToSend
       }
 
-      onFormSubmit(articleData)
+      onFormSubmit(newArticleContent)
    };
 
    const getClassNames = (fieldName) => (
@@ -74,6 +72,7 @@ const ArticleEditor = ({ title, onFormSubmit, defaultValues, hasErrors }) => {
                      <label htmlFor='description'>Short description</label>
                      <input
                         className={getClassNames('description')}
+                        placeholder='Title'
                         type='text'
                         {...register('description',
                            {required: 'Description is required'}
@@ -150,9 +149,9 @@ ArticleEditor.propTypes = {
    title: PropTypes.string.isRequired,
    onFormSubmit: PropTypes.func.isRequired,
    defaultValues: PropTypes.shape({
-      title: PropTypes.string,
-      description: PropTypes.string,
-      body: PropTypes.string,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      body: PropTypes.string.isRequired,
       tagList: PropTypes.arrayOf(
          PropTypes.shape({value: PropTypes.string})
       )
@@ -168,16 +167,11 @@ ArticleEditor.propTypes = {
 };
 
 ArticleEditor.defaultProps = {
-   // Delete -------------------
-   defaultValues: {    //      |
-      title: '',       //      |
-      description: '', //      |
-      body: '',        //      |
-      tagList: [       //      |
-         {value: ''}   //      |
-      ]                //      |
-   },                  //      |
-   // -------------------------
+   defaultValues: {
+      tagList: [
+         {value: ''}
+      ]
+   },
 
    hasErrors: {
       title: [''],

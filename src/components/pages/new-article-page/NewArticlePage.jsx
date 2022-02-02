@@ -33,6 +33,7 @@ const NewArticlePage = ({ token }) => {
       () => {
          setIsLoading(false);
          setDefaultValues(initialValues);
+         setSlug('');
       }
    ), [initialValues]);
 
@@ -51,18 +52,28 @@ const NewArticlePage = ({ token }) => {
             }
 
             if(serverErrors) {
+               let newDefaultValues = {};
+
                // tagList в newArticleData это массив строк вида ['a', 'b']
                // а в defaultValues надо сохранить tagList в виде [ {value: 'a'}, {value: 'b'} ]
-               const { article } = newArticleContent;
-               const { tagList, ...rest } = article;
-               const newArticle = {...rest};
-               newArticle.tagList = [];
+               if(newArticleContent.tagList){
+                  const { tagList, ...rest } = newArticleContent;
+                  newDefaultValues = {...rest};
 
-               tagList.forEach((tag) => {
-                  (newArticle.tagList).push({value: tag})
-               });
+                  newDefaultValues.tagList = [];
+                  tagList.forEach((tag) => {
+                     (newDefaultValues.tagList).push({value: tag})
+                  });
+               } else {
+                  newDefaultValues = {
+                     ...newArticleContent,
+                     tagList: [
+                        {value: ''}
+                     ]
+                  };
+               }
 
-               setDefaultValues(newArticle);
+               setDefaultValues(newDefaultValues);
                setHasErrors(serverErrors);
             }
          })

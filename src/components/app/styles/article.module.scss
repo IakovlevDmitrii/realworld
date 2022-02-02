@@ -61,6 +61,13 @@
    }
 }
 
+.favoriteButton {
+   &:hover,
+   &:active {
+      cursor: pointer;
+   }
+}
+
 .favoritesCount {
    margin-left: 0.5rem;
 }
